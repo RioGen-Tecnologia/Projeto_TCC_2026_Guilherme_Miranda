@@ -3,3 +3,8 @@
 .RData
 .Ruserdata
 .positai
+.Rproj.user/
+data/raw/
+renv/library/
+tmp/
+cache/
