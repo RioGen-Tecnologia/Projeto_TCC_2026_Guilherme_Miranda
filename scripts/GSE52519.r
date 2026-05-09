@@ -144,7 +144,11 @@ message("\n", paste(rep("=", 30), collapse = ""))
 message("Anotando dados de ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
-bgx <- list.files(pattern = ".bgx$")
+bgx <- list.files(
+  path = projeto_dir,
+  pattern = "\\.bgx$",
+  full.names = TRUE)
+
 
 # Ler as primeiras linhas para inspecionar
 linhas <- readLines(bgx, n = 100)
@@ -275,6 +279,6 @@ rm(out_dir)
 # arquivo para metafor
 write.csv(
   metafor_GSE52519,
-  file = file.path(results_dir, id_projeto, "metafor_GSE52519.csv"),
+  file = file.path(processed_dir, id_projeto, "metafor_GSE52519.csv"),
   row.names = TRUE
 )

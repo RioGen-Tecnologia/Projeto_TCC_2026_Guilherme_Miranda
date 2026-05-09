@@ -101,9 +101,9 @@ message("\n", paste(rep("=", 30), collapse = ""))
 message("Anotando dados de ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
-arquivos_gunzip <- list.files(pattern = ".bgx.gz$")
+arquivos_gunzip <- list.files(path = projeto_dir,pattern = "\\.bgx\\.gz$",full.names = TRUE)
 gunzip(arquivos_gunzip,remove = FALSE,overwrite = TRUE)
-arquivos_gunzip <- list.files(pattern = ".bgx$")
+arquivos_gunzip <- list.files(path = projeto_dir,pattern = "\\.bgx$",full.names = TRUE)
 
 # Ler as primeiras linhas para inspecionar
 linhas <- readLines(arquivos_gunzip, n = 100)
@@ -239,6 +239,6 @@ rm(out_dir)
 # arquivo para metafor
 write.csv(
   metafor_GSE13507,
-  file = file.path(results_dir, id_projeto, "metafor_GSE13507.csv"),
+  file = file.path(processed_dir, id_projeto, "metafor_GSE13507.csv"),
   row.names = TRUE
 )

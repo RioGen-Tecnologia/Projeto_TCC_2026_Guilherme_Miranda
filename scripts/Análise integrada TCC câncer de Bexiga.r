@@ -7,8 +7,8 @@
 # para determinar biomarcadores gênicos de câncer de bexiga.
 
 # ============== CARREGANDO PACOTES ==============
-
-source(here("scripts", "setup.R"))
+library(here)
+source(here("scripts", "setup.r"))
 
 # ============== DEFINIÇÃO DE DIRETÓRIO E ARQUIVOS ==============
 # Definir a pasta de trabalho e o master manifesto, com anotações das amostras
@@ -148,7 +148,7 @@ meta_gene <- function(i){
     yi_orig  <- as.numeric(metafor_filtered[i, logFC_orig_cols])
     sei_orig <- as.numeric(metafor_filtered[i, SE_orig_cols])
     
-    # 🔥 usar exatamente os mesmos estudos do modelo
+    # usar exatamente os mesmos estudos do modelo
     yi_orig  <- yi_orig[keep]
     sei_orig <- sei_orig[keep]
     # evitar divisão por zero
@@ -224,11 +224,25 @@ DEGs_filtered <- subset(DEGs_filtered,DEGs_filtered$logFC_meta>=1)
 cat(paste0("Foram obtidos ",nrow(DEGs_filtered)," genes diferencialmente expressos up-regulados e com I² igual a 0!\n"))
 
 # Salvando dados
+# confeindo rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(results_dir, "DEGs_tables")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
 
 #todos os genes
-write.csv(results, "Results/results_meta.csv", row.names = FALSE)
+write.csv(
+  results,
+  file = file.path(results_dir, "DEGs_tables", "global_meta.csv"),
+  row.names = FALSE
+)
 #genes diferencialmente expressos
-write.csv(DEGs, "Results/DEGs_meta.csv", row.names = FALSE)
+write.csv(
+  DEGs,
+  file = file.path(results_dir, "DEGs_tables", "DEGs_meta.csv"),
+  row.names = FALSE
+)
 
 
 # ============== GRÁFICOS DE EXPRESSÃO ==============
@@ -242,7 +256,7 @@ summary(results$I2)
 ## ==== HISTOGRAMA I² GLOBAL ====
 #pico 0: genes estáveis que não se expressam diferencialmente. pico perto de 100: genes de expressão variável 
 
-png("Images/histograma_Genes_totais_Bexiga.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "histograma_Genes_totais_Bexiga.png"), width = 3000, height = 2000, res = 300)
 
 hist(results$I2,
      breaks = 50,
@@ -262,7 +276,7 @@ summary(DEGs$I2)
 
 ## ==== HISTOGRAMA I² DEGS ====
 
-png("Images/histograma_DEGs_Bexiga.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "histograma_DEGs_Bexiga.png"), width = 3000, height = 2000, res = 300)
 
 hist(DEGs$I2,
      breaks = 50,
@@ -288,7 +302,8 @@ results$significance[
 ] <- "Downregulated"
 results$log10FDR <- -log10(results$FDR)
 
-png("Images/meta_volcano_plot_bexiga.png", width = 8, height = 8, units = "in", res = 300)
+
+png(file.path(figures_dir, "meta_volcano_plot_bexiga.png"), width = 8, height = 8, units = "in", res = 300)
 
 ggplot(results, aes(x = logFC_meta, y = log10FDR, color = significance)) +
   geom_point(alpha = 0.6, size = 1.5) +
@@ -407,23 +422,23 @@ react_DEGs <- check_genes(ereact, genes_robustos)
 
 ## ==== PLOTS ====
 
-png("Images/GO_BP_dotplot.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_bp, showCategory = 20)
 dev.off()
 
-png("Images/GO_CC_dotplot.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "GO_CC_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_cc, showCategory = 20)
 dev.off()
 
-png("Images/GO_MF_dotplot.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "GO_MF_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_mf, showCategory = 20)
 dev.off()
 
-png("Images/KEGG_dotplot.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "KEGG_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ekegg, showCategory = 20)
 dev.off()
 
-png("Images/REACTOME_dotplot.png", width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "REACTOME_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ereact, showCategory = 20)
 dev.off()
 

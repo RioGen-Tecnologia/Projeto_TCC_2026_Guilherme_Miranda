@@ -38,12 +38,12 @@ if(!dir.exists(file.path(geo_dir, id_projeto))) {
 projeto_dir <- file.path(geo_dir, id_projeto)
 
 # Descompactando
-arquivos_tar <- list.files(
+# extraíndo
+arquivo_zip <- list.files(
   path = projeto_dir,
-  pattern = "\\.tar$",
-  full.names = TRUE
-)
-untar(arquivos_tar, exdir = projeto_dir)
+  pattern = "\\.gz$",
+  full.names = TRUE)
+R.utils::gunzip(arquivo_zip, remove = FALSE, overwrite = TRUE)
 
 # ====== Leitura dos dados brutos illumina ======
 
@@ -227,7 +227,7 @@ rm(out_dir)
 # arquivo para metafor
 write.csv(
   metafor_GSE65635,
-  file = file.path(results_dir, id_projeto, "metafor_GSE65635.csv"),
+  file = file.path(processed_dir, id_projeto, "metafor_GSE65635.csv"),
   row.names = TRUE
 )
 

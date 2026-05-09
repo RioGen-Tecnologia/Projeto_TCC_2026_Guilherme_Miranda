@@ -216,7 +216,7 @@ rm(out_dir)
 # arquivo para metafor
 write.csv(
   metafor_GSE7476,
-  file = file.path(results_dir, id_projeto, "metafor_GSE7476.csv"),
+  file = file.path(processed_dir, id_projeto, "metafor_GSE7476.csv"),
   row.names = TRUE
 )
 
