@@ -19,10 +19,10 @@ library(illuminaHumanv4.db)
 id_projeto <- "GSE65635"
 
 # carregando o master manifesto
-dados_manifesto <- read.csv(file.path(main_dir, manifesto_nome))
-dados_manifesto <- dados_manifesto[dados_manifesto$study_ID == "GSE65635", c("sample_ID", "sample_type", "characteristics")]
-rownames(dados_manifesto) <- dados_manifesto$sample_ID
-dados_manifesto$sample_ID <- NULL
+metadata <- read.csv(metadata_path)
+metadata <- metadata[metadata$study_ID == "GSE65635", c("sample_ID", "sample_type", "characteristics")]
+rownames(metadata) <- metadata$sample_ID
+metadata$sample_ID <- NULL
 
 # --- Etapa de Download ---
 message("\n", paste(rep("=", 30), collapse = ""))
@@ -34,12 +34,16 @@ if(!dir.exists(file.path(geo_dir, id_projeto))) {
   getGEOSuppFiles(id_projeto, baseDir = geo_dir)
 }
 
-# Entrando na pasta do projeto
-setwd(file.path(geo_dir, id_projeto))
+# definindo pasta do projeto
+projeto_dir <- file.path(geo_dir, id_projeto)
 
-# extraíndo
-arquivo_zip <- list.files(pattern="\\.gz$", full.names=TRUE)
-R.utils::gunzip(arquivo_zip, remove = FALSE, overwrite = TRUE)
+# Descompactando
+arquivos_tar <- list.files(
+  path = projeto_dir,
+  pattern = "\\.tar$",
+  full.names = TRUE
+)
+untar(arquivos_tar, exdir = projeto_dir)
 
 # ====== Leitura dos dados brutos illumina ======
 
@@ -49,7 +53,9 @@ message("Lendo dados para ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
 # Cria uma variável com arquivos .txt
-cels.GSE65635 <- read.delim("GSE65635_non-normalized.txt", check.names = FALSE)
+
+arquivo_txt <- file.path(projeto_dir, "GSE65635_non-normalized.txt")
+cels.GSE65635 <- read.delim(arquivo_txt,check.names = FALSE)
 
 # Remover coluna de IDs
 dados <- cels.GSE65635[,-1]
@@ -96,10 +102,10 @@ norm_corrigido_GSE65635 <- t(norm_corrigido_GSE65635)
 
 # ====== remove amostras fora do manifesto ======
 
-ids <- intersect(rownames(norm_corrigido_GSE65635), rownames(dados_manifesto))
+ids <- intersect(rownames(norm_corrigido_GSE65635), rownames(metadata))
 
 norm_corrigido_GSE65635 <- norm_corrigido_GSE65635[ids, ]
-dados_manifesto <- dados_manifesto[ids, ]
+metadata <- metadata[ids, ]
 
 # ====== anotação com EntrezID ======
 
@@ -175,7 +181,7 @@ message("Executando análise estatística (limma) para ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
 # cria a matriz de modelo para o limma 
-fator_GSE65635 <- factor(dados_manifesto$sample_type,levels = c("non_tumor", "tumor"))
+fator_GSE65635 <- factor(metadata$sample_type,levels = c("non_tumor", "tumor"))
 matriz_modelo_GSE65635 <- as.matrix(model.matrix(~0 + fator_GSE65635))
 colnames(matriz_modelo_GSE65635) <- c('non_tumor','tumor')
 
@@ -209,8 +215,19 @@ metafor_GSE65635 <- data.frame(
 # ====== Salvar arquivo ======
 
 # confere se o pData e matriz estão realmente alinhados
-all(rownames(norm_corrigido_GSE65635) == rownames(dados_manifesto))
+all(rownames(norm_corrigido_GSE65635) == rownames(metadata))
+
+#confere rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(processed_dir, id_projeto)
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
 
 # arquivo para metafor
-write.csv(metafor_GSE65635, "metafor_GSE65635.csv", row.names = TRUE)
+write.csv(
+  metafor_GSE65635,
+  file = file.path(results_dir, id_projeto, "metafor_GSE65635.csv"),
+  row.names = TRUE
+)
 

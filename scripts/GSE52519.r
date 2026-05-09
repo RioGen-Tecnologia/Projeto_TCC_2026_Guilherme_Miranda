@@ -16,10 +16,10 @@ library(AnnotationDbi)
 id_projeto <- "GSE52519"
 
 # carregando o master manifesto
-dados_manifesto <- read.csv(file.path(main_dir, manifesto_nome))
-dados_manifesto <- dados_manifesto[dados_manifesto$study_ID == "GSE52519", c("sample_ID", "sample_type", "characteristics")]
-rownames(dados_manifesto) <- dados_manifesto$sample_ID
-dados_manifesto$sample_ID <- NULL
+metadata <- read.csv(metadata_path)
+metadata <- metadata[metadata$study_ID == "GSE52519", c("sample_ID", "sample_type", "characteristics")]
+rownames(metadata) <- metadata$sample_ID
+metadata$sample_ID <- NULL
 
 # --- Etapa de Download ---
 message("\n", paste(rep("=", 30), collapse = ""))
@@ -31,18 +31,27 @@ if(!dir.exists(file.path(geo_dir, id_projeto))) {
   getGEOSuppFiles(id_projeto, baseDir = geo_dir)
 }
 
-# Entrando na pasta do projeto
-setwd(file.path(geo_dir, id_projeto))
+# definindo pasta do projeto
+projeto_dir <- file.path(geo_dir, id_projeto)
 
 # Descompactando
-arquivos_tar <- list.files(pattern = "\\.tar$") 
-untar(arquivos_tar)
+arquivos_tar <- list.files(
+  path = projeto_dir,
+  pattern = "\\.tar$",
+  full.names = TRUE
+)
+untar(arquivos_tar, exdir = projeto_dir)
 
-arquivos_gunzip <- list.files(pattern = ".gz$")
-for (arquivo in arquivos_gunzip){
-  gunzip(arquivo,remove = FALSE,overwrite = TRUE)
-}
+arquivos_gunzip <- list.files(
+  path = projeto_dir,
+  pattern = "\\.gz$",
+  full.names = TRUE)
 
+for (arquivo in arquivos_gunzip) {
+  gunzip(
+    arquivo,
+    remove = FALSE,
+    overwrite = TRUE)}
 
 # ====== Leitura dos dados brutos illumina ======
 # A normalização neqc() do pacote limma foi feito para trabalhar com objetos EListRaw contendo:
@@ -52,7 +61,11 @@ message("\n", paste(rep("=", 30), collapse = ""))
 message("Lendo dados para ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
-non_normalized <- list.files(pattern = "non-normalized.txt$")
+non_normalized <- list.files(
+  path = projeto_dir,
+  pattern = "non-normalized.txt$",
+  full.names = TRUE
+)
 
 # Cria uma variável com arquivos .txt
 cels.GSE52519 <- read.delim(non_normalized, check.names = FALSE)
@@ -118,10 +131,10 @@ norm_corrigido_GSE52519 <- t(norm_GSE52519$E)
 
 # ====== remove amostras fora do manifesto ======
 
-ids <- intersect(rownames(norm_corrigido_GSE52519), rownames(dados_manifesto))
+ids <- intersect(rownames(norm_corrigido_GSE52519), rownames(metadata))
 
 norm_corrigido_GSE52519 <- norm_corrigido_GSE52519[ids, ]
-dados_manifesto <- dados_manifesto[ids, ]
+metadata <- metadata[ids, ]
 
 
 # ====== anotação com EntrezID ======
@@ -216,7 +229,7 @@ norm_corrigido_GSE52519 <- norm_corrigido_GSE52519[, idx_final]
 # ====== Análise Limma ======
 
 # cria a matriz de modelo para o limma 
-fator_GSE52519 <- factor(dados_manifesto$sample_type,levels = c("non_tumor", "tumor"))
+fator_GSE52519 <- factor(metadata$sample_type,levels = c("non_tumor", "tumor"))
 matriz_modelo_GSE52519 <- as.matrix(model.matrix(~0 + fator_GSE52519))
 colnames(matriz_modelo_GSE52519) <- c('non_tumor','tumor')
 
@@ -250,7 +263,18 @@ metafor_GSE52519 <- data.frame(
 # ====== Salvar arquivo ======
 
 # confere se o pData e matriz estão realmente alinhados
-all(rownames(norm_corrigido_GSE52519) == rownames(dados_manifesto))
+all(rownames(norm_corrigido_GSE52519) == rownames(metadata))
+
+#confere rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(processed_dir, id_projeto)
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
 
 # arquivo para metafor
-write.csv(metafor_GSE52519, "metafor_GSE52519.csv", row.names = TRUE)
+write.csv(
+  metafor_GSE52519,
+  file = file.path(results_dir, id_projeto, "metafor_GSE52519.csv"),
+  row.names = TRUE
+)

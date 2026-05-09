@@ -18,10 +18,10 @@ library(illuminaHumanv2.db)
 id_projeto <- "GSE37817"
 
 # carregando o master manifesto
-dados_manifesto <- read.csv(file.path(main_dir, manifesto_nome))
-dados_manifesto <- dados_manifesto[dados_manifesto$study_ID == "GSE37817", c("sample_ID", "sample_type", "characteristics")]
-rownames(dados_manifesto) <- dados_manifesto$sample_ID
-dados_manifesto$sample_ID <- NULL
+metadata <- read.csv(metadata_path)
+metadata <- metadata[metadata$study_ID == "GSE37817", c("sample_ID", "sample_type", "characteristics")]
+rownames(metadata) <- metadata$sample_ID
+metadata$sample_ID <- NULL
 
 
 # Criação da pasta se não existir
@@ -29,9 +29,6 @@ dados_manifesto$sample_ID <- NULL
 if(!dir.exists(file.path(geo_dir, id_projeto))) {
   getGEOSuppFiles(id_projeto, baseDir = geo_dir)
 }
-
-# Entrando na pasta do projeto
-setwd(file.path(geo_dir, id_projeto))
 
 # ====== Leitura dos dados brutos illumina ======
 # Este projeto não possui dados brutos disponíveis. A única opção é baixar a matriz normalizada do geo
@@ -62,10 +59,10 @@ norm_corrigido_GSE37817 <- t(norm_corrigido_GSE37817)
 
 # ====== remove amostras fora do manifesto ======
 
-ids <- intersect(rownames(norm_corrigido_GSE37817), rownames(dados_manifesto))
+ids <- intersect(rownames(norm_corrigido_GSE37817), rownames(metadata))
 
 norm_corrigido_GSE37817 <- norm_corrigido_GSE37817[ids, ]
-dados_manifesto <- dados_manifesto[ids, ]
+metadata <- metadata[ids, ]
 
 # ====== anotação com EntrezID ======
 
@@ -142,7 +139,7 @@ message("Executando análise estatística (limma) para ", id_projeto, "...")
 message(paste(rep("=", 30), collapse = ""))
 
 # cria a matriz de modelo para o limma 
-fator_GSE37817 <- factor(dados_manifesto$sample_type,levels = c("non_tumor", "tumor"))
+fator_GSE37817 <- factor(metadata$sample_type,levels = c("non_tumor", "tumor"))
 matriz_modelo_GSE37817 <- as.matrix(model.matrix(~0 + fator_GSE37817))
 colnames(matriz_modelo_GSE37817) <- c('non_tumor','tumor')
 
@@ -175,7 +172,18 @@ metafor_GSE37817 <- data.frame(
 # ====== Salvar arquivo ======
 
 # confere se o pData e matriz estão realmente alinhados
-all(rownames(norm_corrigido_GSE37817) == rownames(dados_manifesto))
+all(rownames(norm_corrigido_GSE37817) == rownames(metadata))
+
+#confere rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(processed_dir, id_projeto)
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
 
 # arquivo para metafor
-write.csv(metafor_GSE37817, "metafor_GSE37817.csv", row.names = TRUE)
+write.csv(
+  metafor_GSE37817,
+  file = file.path(results_dir, id_projeto, "metafor_GSE37817.csv"),
+  row.names = TRUE
+)

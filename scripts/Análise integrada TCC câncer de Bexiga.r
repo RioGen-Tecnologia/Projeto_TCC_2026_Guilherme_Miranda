@@ -8,105 +8,70 @@
 
 # ============== CARREGANDO PACOTES ==============
 
-library(GEOquery) #busca e download de datasets do Gene Omnibus
-library(affy) #pacote de normalização affymetrix
-library(oligo) #pacote de normalização oligo
-library(limma) #análise estatística e normalização
-library(AnnotationDbi) # pacote de execução de anotação
-library(hgu133plus2.db) #pacote de base de anotação
-library(hta20transcriptcluster.db) #pacote de base de anotação
-library(hgu133a.db) #pacote de base de anotação
-library(hgu133acdf) #pacote de base de anotação
-library(illuminaHumanv2.db) #pacote de base de anotação
-library(illuminaHumanv3.db) #pacote de base de anotação
-library(illuminaHumanv4.db) #pacote de base de anotação
-library(org.Hs.eg.db) #pacote de base de anotação
-library(metafor) #pacote de meta-análise
-library(ggplot2) #pacote de gráficos de expressão
-library(dplyr) #gerenciamento de dataframes
-library(clusterProfiler) #enriquecimento funcional (GO e KEGG)
-library(ReactomePA) #enriquecimento funcional (Reactome)
-library(enrichplot) #pacote de gráficos de enriquecimento
-library(STRINGdb) #pacote de rede PPi
-
-# complementos a outros pacotes
-library(R.utils) #ferramentas do R
-library(Biobase)
-library(BiocGenerics)
-library(generics)
-library(stats4)
-library(IRanges)
-library(S4Vectors)
-library(R.oo)
-library(R.methodsS3)
-library(oligoClasses)
-library(Biostrings)
-library(DBI)
-library(RSQLite)
+source(here("scripts", "setup.R"))
 
 # ============== DEFINIÇÃO DE DIRETÓRIO E ARQUIVOS ==============
 # Definir a pasta de trabalho e o master manifesto, com anotações das amostras
 
-# Diretório mãe 
-main_dir <- "/home/guilherme/Documents/bexiga_meta-análise/Projeto TCC 2026 original//"
-setwd(main_dir)
+geo_dir      <- here("data", "raw", "GEO")
+processed_dir <- here("data", "processed")
+results_dir  <- here("results")
+figures_dir  <- here("figures")
+scripts_dir  <- here("scripts")
+metadata_dir <- here("metadata")
+
+dirs <- c(
+  geo_dir,
+  processed_dir,
+  results_dir,
+  figures_dir,
+  scripts_dir
+)
+
+# cria os diretórios se eles não existirem
+for (d in dirs) {
+  if (!dir.exists(d)) {
+    dir.create(d, recursive = TRUE)
+  }
+}
 
 # Master Manifesto com anotações das amostras
-manifesto_nome <- "Master_manifesto_bladder_cancer_TCC.csv"
-
-
+metadata_path <- list.files(
+  here("metadata"),
+  pattern = "\\.csv$",
+  full.names = TRUE
+)
 
 # ============== ANÁLISE DE PROJETOS ==============
 # Esta sessão executa os scripts secundários que extrem os dados do GEO, normalizam,
 # anotam e análisam estatísticamente por limma cada um dos projetos.
 
-# Diretório da pasta GEO, onde serão baixados os dados brutos
-geo_dir <- file.path(main_dir, "GEO")
-
-# Cria as pastas do projeto se elas não existirem
-dirs <- c(geo_dir, "Images", "Results")
-invisible(lapply(dirs, dir.create, recursive = TRUE, showWarnings = FALSE))
-
-# Pasta onde estão os scripts secundários
-pasta_scripts <- file.path(main_dir, "Scripts")
 
 # Lista scripts que começam com "GSE"
-scripts_projetos <- list.files(path = pasta_scripts, 
-                               pattern = "^GSE.*\\.r$", 
-                               full.names = TRUE)
+scripts_projetos <- list.files(
+  path = scripts_dir,
+  pattern = "^GSE.*\\.[Rr]$",
+  full.names = TRUE
+)
 
 # Loop de execução dos scripts secundários
 arquivos_metafor <- list()
 
 for (script in scripts_projetos) {
-  setwd(main_dir)
-  message("--- Processando: ", basename(script), " ---")
-  # cria ambiente isolado
+  message("Processando: ", basename(script))
   env <- new.env()
-  # roda o script dentro do ambiente
   source(script, local = env)
-  # extrai ID do projeto
   id_atual <- gsub(".*(GSE[0-9]+).*", "\\1", basename(script))
   nome_objeto <- paste0("metafor_", id_atual)
-  # verifica se objeto existe no ambiente
   if (exists(nome_objeto, envir = env)) {
-    df <- get(nome_objeto, envir = env)
-    # 🔴 CHECAGEM IMPORTANTE
-    if (any(duplicated(rownames(df)))) {
-      warning("Duplicatas em ", id_atual, " — corrigir antes da meta-análise")
-    }
-    arquivos_metafor[[id_atual]] <- df
-    message("Objeto ", nome_objeto, " extraído com sucesso.")
+    arquivos_metafor[[id_atual]] <- get(nome_objeto, envir = env)
   } else {
-    warning("Objeto ", nome_objeto, " não encontrado.")
+    warning(nome_objeto, " não encontrado.")
   }
-  # destrói ambiente (libera memória)
   rm(env)
   gc()
 }
 
-# voltando ao diretório mãe
-setwd(main_dir)
 
 # ============== PREPARAÇÃO PARA META-ANÁLISE ==============
 # Nesta seção os dados dos diferentes projetos são integrados.
@@ -137,8 +102,20 @@ input_metafor$EntrezID <- NULL
 # o pacote metafor.
 # Foi utilizado como critério genes que aparecem em no mínimo 3 projetos simultaneamente.
 
+# confeindo rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(results_dir, "meta_analysis")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
+
 #  salvando tabela de input do metafor
-write.csv(input_metafor,"Results/input_meta_análise_bexiga_TCC_2026.csv",row.names = TRUE)
+write.csv(input_metafor,
+          file = file.path(results_dir,
+                           "meta_analysis",
+                           "metafor_GSE3167.csv"),
+          row.names = TRUE)
+
 
 # obtenção das colunas de efeito e erro padrão
 logFC_cols <- grep("_logFC_scaled$", colnames(input_metafor))
