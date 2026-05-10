@@ -23,6 +23,7 @@ library(clusterProfiler) #enriquecimento funcional (GO e KEGG)
 library(ReactomePA) #enriquecimento funcional (Reactome)
 library(enrichplot) #pacote de gráficos de enriquecimento
 library(STRINGdb) #pacote de rede PPi
+library(igraph) #complemento do grafico de rede PPI
 
 # complementos a outros pacotes
 library(R.utils) #ferramentas do R

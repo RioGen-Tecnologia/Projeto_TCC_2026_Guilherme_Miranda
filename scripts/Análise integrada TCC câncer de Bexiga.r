@@ -577,10 +577,213 @@ dev.off()
 
 
 # ============== PPI NETWORK ==============
+# análise de rede de interação proteína-proteína dos genes diferencialmente expressos
+# com o objetivo de encontrar "hub genes", genes centrais na rede tumoral ou que
+# parecem coordenar múltiplos processos.
 
 
 
+## ==== STRINGDB ====
+
+# inicializando conexão com banco STRING
+# species = 9606 -> Homo sapiens
+# score_threshold = 400 -> interações de confiança moderada
+string_db <- STRINGdb$new(
+  version = "12",
+  species = 9606,
+  score_threshold = 400,
+  input_directory = ""
+)
 
 
+## ==== MAPEAMENTO DOS GENES ====
+
+# criando dataframe contendo genes diferencialmente expressos
+genes_df <- data.frame(
+  gene = unique(DEGs$Symbol)
+)
+
+# mapeando símbolos gênicos para IDs STRING
+mapped_genes <- string_db$map(
+  genes_df,
+  "gene",
+  removeUnmappedRows = TRUE
+)
+
+# checando quantos genes foram mapeados com sucesso
+nrow(mapped_genes)
 
 
+## ==== OBTENÇÃO DA REDE PPI ====
+
+# obtendo interações proteína-proteína
+ppi <- string_db$get_interactions(
+  mapped_genes$STRING_id
+)
+
+# removendo:
+# - autointerações
+# - duplicatas
+
+ppi <- ppi %>%
+  filter(from != to) %>%
+  distinct(from, to, .keep_all = TRUE)
+
+
+## ==== CONVERSÃO PARA IGRAFH ====
+
+# convertendo rede para objeto igraph
+# combined_score será utilizado como peso das arestas
+
+g <- graph_from_data_frame(
+  ppi[, c("from", "to", "combined_score")],
+  directed = FALSE
+)
+
+
+## ==== ANÁLISE DE CENTRALIDADE ====
+
+# número de conexões de cada gene
+degree_scores <- degree(g)
+
+# importância topológica na comunicação da rede
+betweenness_scores <- betweenness(g)
+
+
+## ==== TABELA INICIAL DE HUBS ====
+
+hub_table <- data.frame(
+  STRING_id = names(degree_scores),
+  degree = degree_scores,
+  betweenness = betweenness_scores
+)
+
+
+## ==== ADICIONANDO NOMES DOS GENES ====
+
+hub_table <- merge(
+  hub_table,
+  mapped_genes[, c("STRING_id", "gene")],
+  by = "STRING_id"
+)
+
+
+## ==== NORMALIZAÇÃO DAS MÉTRICAS ====
+
+# normalizando métricas para criação de score combinado
+
+hub_table$degree_scaled <- as.numeric(
+  scale(hub_table$degree)
+)
+
+hub_table$betweenness_scaled <- as.numeric(
+  scale(hub_table$betweenness)
+)
+
+
+## ==== SCORE FINAL DE HUB ====
+
+# genes altamente conectados e biologicamente centrais
+# terão maiores scores
+
+hub_table$hub_score <-
+  hub_table$degree_scaled +
+  hub_table$betweenness_scaled
+
+
+## ==== DETECÇÃO DE MÓDULOS ====
+
+# detectando comunidades/módulos funcionais
+# na rede tumoral
+
+communities <- cluster_louvain(g)
+
+hub_table$module <- membership(communities)[
+  hub_table$STRING_id
+]
+
+
+## ==== ADICIONANDO LOGFC ====
+
+# integrando magnitude de expressão diferencial
+
+logfc_table <- DEGs %>%
+  select(Symbol, logFC_meta) %>%
+  distinct()
+
+hub_table <- hub_table %>%
+  left_join(
+    logfc_table,
+    by = c("gene" = "Symbol")
+  )
+
+
+## ==== GENES ROBUSTOS ====
+
+# genes robustos:
+# - up-regulated
+# - heterogeneidade entre estudos = 0%
+
+genes_robustos <- unique(DEGs_filtered$Symbol)
+
+# identificando quais hubs também são robustos
+
+hub_table$robusto <- ifelse(
+  hub_table$gene %in% genes_robustos,
+  "Sim",
+  "Não"
+)
+
+
+## ==== ORGANIZAÇÃO FINAL ====
+
+# ordenando genes pelo score combinado
+
+hub_table <- hub_table %>%
+  arrange(desc(hub_score))
+
+
+## ==== TOP HUB GENES ====
+
+# genes mais centrais da rede
+
+top_hubs <- hub_table %>%
+  slice_max(hub_score, n = 20)
+
+# top hubs robustos
+
+top_hubs_robustos <- hub_table %>%
+  filter(robusto == "Sim") %>%
+  slice_max(hub_score, n = 10)
+
+
+## ==== VISUALIZAÇÃO DA REDE ====
+
+# plot simples
+plot(
+  communities,
+  g,
+  vertex.size = degree(g) * 1.5,
+  vertex.label.cex = 0.7
+)
+
+# plot detalhado
+
+plot(
+  communities,
+  g,
+  vertex.size = degree(g) * 1.8,
+  vertex.label.cex = 0.6,
+  vertex.label.color = "black",
+  edge.width = E(g)$combined_score / 400,
+  main = "PPI Network - Bladder Cancer DEGs"
+)
+
+
+## ==== EXPORTAÇÃO DOS RESULTADOS ====
+
+write.csv(
+  hub_table,
+  file.path(results_dir, "hub_genes.csv"),
+  row.names = FALSE
+)
