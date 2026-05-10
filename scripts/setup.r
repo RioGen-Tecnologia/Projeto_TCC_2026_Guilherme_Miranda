@@ -18,6 +18,7 @@ library(org.Hs.eg.db) #pacote de base de anotação
 library(metafor) #pacote de meta-análise
 library(ggplot2) #pacote de gráficos de expressão
 library(dplyr) #gerenciamento de dataframes
+library(tidyr) #gerenciamento de dataframes
 library(clusterProfiler) #enriquecimento funcional (GO e KEGG)
 library(ReactomePA) #enriquecimento funcional (Reactome)
 library(enrichplot) #pacote de gráficos de enriquecimento

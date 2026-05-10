@@ -113,7 +113,7 @@ rm(out_dir)
 write.csv(input_metafor,
           file = file.path(results_dir,
                            "meta_analysis",
-                           "metafor_GSE3167.csv"),
+                           "input_metafor_TCC_2026.csv"),
           row.names = TRUE)
 
 
@@ -329,6 +329,10 @@ dev.off()
 
 
 # ============== ENRIQUECIMENTO FUNCIONAL ==============
+# realiza enriquecimento funcional (Over-representation analysis) com genes
+# diferencialmente expressos nas bases de dados KEGG, REACTOME e GO (biological
+# process, Cell Component & Molecular function) para identificar candidatos a
+# biomarcadores é identificado os genes presentes nas vias mais relevantes
 
 # lista de genes diferencialmente expressos
 genes_degs <- unique(DEGs$Gene)
@@ -339,6 +343,7 @@ genes_background <- unique(results$Gene)
 
 ## ==== GO ENRICHMENT ====
 
+# biological process
 ego_bp <- enrichGO(
   gene          = genes_degs,
   universe      = genes_background,
@@ -350,6 +355,14 @@ ego_bp <- enrichGO(
   readable      = TRUE
 )
 
+ego_bp <- simplify(
+  ego_bp,
+  cutoff = 0.7,
+  by = "p.adjust",
+  select_fun = min
+)
+
+# celular component
 ego_cc <- enrichGO(
   gene = genes_degs,
   universe = genes_background,
@@ -361,6 +374,14 @@ ego_cc <- enrichGO(
   readable = TRUE
 )
 
+ego_cc <- simplify(
+  ego_cc,
+  cutoff = 0.7,
+  by = "p.adjust",
+  select_fun = min
+)
+
+# molecular function
 ego_mf <- enrichGO(
   gene = genes_degs,
   universe = genes_background,
@@ -370,6 +391,13 @@ ego_mf <- enrichGO(
   pAdjustMethod = "BH",
   pvalueCutoff = 0.05,
   readable = TRUE
+)
+
+ego_mf <- simplify(
+  ego_mf,
+  cutoff = 0.7,
+  by = "p.adjust",
+  select_fun = min
 )
 
 ## ==== KEGG ====
@@ -397,41 +425,98 @@ ereact <- enrichPathway(
 ## alinhamento de genes robustos com vias funcionais enriquecidas
 
 # colentando os genes robustos (heterogeneidade e up-regulados)
-genes_robustos <- unique(DEGs_filtered$Symbol)
+genes_degs_symbol <- unique(DEGs$Symbol)
 
 # função para verificar presença dos genes robustos nas vias
-check_genes <- function(enrich_result, genes_robustos) {
-  
+check_genes <- function(enrich_result, genes_degs_symbol) {
   df <- as.data.frame(enrich_result)
-  
   df$genes_presentes <- sapply(df$geneID, function(x) {
     genes <- unlist(strsplit(x, "/"))
-    intersect(genes, genes_robustos)
+    presentes <- intersect(genes, genes_degs_symbol)
+    if(length(presentes) == 0) {
+      return(NA)
+    }
+    paste(presentes, collapse = ", ")
   })
-  
-  df$n_genes_robustos <- sapply(df$genes_presentes, length)
-  
+  df$n_genes_robustos <- sapply(
+    strsplit(ifelse(is.na(df$genes_presentes),
+                    "",
+                    df$genes_presentes),
+             ", "),
+    function(x) sum(x != "")
+  )
   return(df)
 }
 
-bp_DEGs    <- check_genes(ego_bp, genes_robustos)
-cc_DEGs    <- check_genes(ego_cc, genes_robustos)
-mf_DEGs    <- check_genes(ego_mf, genes_robustos)
-kegg_DEGs  <- check_genes(ekegg, genes_robustos)
-react_DEGs <- check_genes(ereact, genes_robustos)
+bp_DEGs    <- check_genes(ego_bp, genes_degs_symbol)
+cc_DEGs    <- check_genes(ego_cc, genes_degs_symbol)
+mf_DEGs    <- check_genes(ego_mf, genes_degs_symbol)
+kegg_DEGs  <- check_genes(ekegg, genes_degs_symbol)
+react_DEGs <- check_genes(ereact, genes_degs_symbol)
+
+
+# unindo as vias enriquecidas
+all_pathways <- bind_rows(
+  bp_DEGs %>% mutate(Database = "GO_BP"),
+  cc_DEGs %>% mutate(Database = "GO_CC"),
+  mf_DEGs %>% mutate(Database = "GO_MF"),
+  kegg_DEGs %>% mutate(Database = "KEGG"),
+  react_DEGs %>% mutate(Database = "REACTOME")
+)
+
+# filtrando apenas vias contendo genes robustos
+all_pathways_filtered <- all_pathways %>%
+  filter(!is.na(genes_presentes)) %>%
+  filter(n_genes_robustos > 0)
+# ordenando vias mais significativas
+all_pathways_filtered <- all_pathways_filtered %>%
+  arrange(p.adjust)
+# top vias por base de dados
+top_pathways <- all_pathways_filtered %>%
+  group_by(Database) %>%
+  slice_min(order_by = p.adjust, n = 10)
+
+# explodindo genes das vias
+all_pathways_long <- all_pathways_filtered %>%
+  separate_rows(genes_presentes, sep = ", ")
+
+# score funcional
+enrichment_scores <- all_pathways_long %>%
+  group_by(genes_presentes) %>%
+  summarise(
+    n_vias = n(),
+    databases = n_distinct(Database),
+    mean_enrichment = mean(FoldEnrichment, na.rm = TRUE),
+    best_padj = min(p.adjust, na.rm = TRUE)
+  ) %>%
+  arrange(desc(n_vias), best_padj)
+
+## ==== EXPORTANDO DADOS ====
+
+# confeindo rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(results_dir, "enrichment")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
+
+write.csv(
+  all_pathways_filtered,
+  file.path(results_dir, "enrichment", "all_enriched_pathways.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  enrichment_scores,
+  file.path(results_dir, "enrichment",  "gene_enrichment_scores.csv"),
+  row.names = FALSE
+)
 
 ## ==== PLOTS ====
 
+# dotplots
 png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_bp, showCategory = 20)
-dev.off()
-
-png(file.path(figures_dir, "GO_CC_dotplot.png"), width = 3000, height = 2000, res = 300)
-dotplot(ego_cc, showCategory = 20)
-dev.off()
-
-png(file.path(figures_dir, "GO_MF_dotplot.png"), width = 3000, height = 2000, res = 300)
-dotplot(ego_mf, showCategory = 20)
 dev.off()
 
 png(file.path(figures_dir, "KEGG_dotplot.png"), width = 3000, height = 2000, res = 300)
@@ -441,4 +526,61 @@ dev.off()
 png(file.path(figures_dir, "REACTOME_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ereact, showCategory = 20)
 dev.off()
+
+# cnetplots
+gene_fc <- DEGs$logFC_meta
+names(gene_fc) <- DEGs$Symbol
+
+png(file.path(figures_dir, "GO_BP_cnetplot.png"),width = 3500,height = 3000,res = 450)
+enrichplot::cnetplot(
+  ego_bp,
+  showCategory = 5,
+  foldChange = gene_fc,
+  node_label = "all",
+  layout = "kk"
+) +
+  scale_color_gradientn(
+    colours = c("#2C7BB6", "#D41159"),
+    limits = c(-3, 3),
+    oob = scales::squish,
+    name = "logFC"
+  ) +
+  labs(size = "Gene count") +
+  
+  theme(
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  )
+dev.off()
+
+png(file.path(figures_dir, "REACTOME_cnetplot.png"),width = 3500,height = 3000,res = 450)
+enrichplot::cnetplot(
+  ereact,
+  showCategory = 5,
+  foldChange = gene_fc,
+  node_label = "all",
+  layout = "kk"
+) +
+  scale_color_gradientn(
+    colours = c("#2C7BB6", "#D41159"),
+    limits = c(-3, 3),
+    oob = scales::squish,
+    name = "logFC"
+  ) +
+  labs(size = "Gene count") +
+  theme(
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  )
+dev.off()
+
+
+
+# ============== PPI NETWORK ==============
+
+
+
+
+
+
 
