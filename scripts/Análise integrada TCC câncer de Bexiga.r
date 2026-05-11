@@ -42,6 +42,10 @@ metadata_path <- list.files(
   full.names = TRUE
 )
 
+# limpando
+rm(d,dirs)
+gc()
+
 # ============== ANÁLISE DE PROJETOS ==============
 # Esta sessão executa os scripts secundários que extrem os dados do GEO, normalizam,
 # anotam e análisam estatísticamente por limma cada um dos projetos.
@@ -72,6 +76,9 @@ for (script in scripts_projetos) {
   gc()
 }
 
+#limpando
+rm(scripts_projetos,script,nome_objeto)
+gc()
 
 # ============== PREPARAÇÃO PARA META-ANÁLISE ==============
 # Nesta seção os dados dos diferentes projetos são integrados.
@@ -96,6 +103,9 @@ input_metafor <- Reduce(function(x, y) merge(x, y, by = "EntrezID", all = TRUE),
 rownames(input_metafor) <- input_metafor$EntrezID
 input_metafor$EntrezID <- NULL
 
+# limpando
+rm(entrez)
+gc()
 
 # ============== META-ANÁLISE ==============
 # Salvamos o input da meta-análise e executamos a meta-análise devidamente utilizando
@@ -197,7 +207,10 @@ results$Symbol <- gene_symbols
 # remove genes NA, sem anotação
 results <- results[!is.na(results$Symbol), ]
 
-
+# limpando
+rm(logFC_cols,SE_cols,logFC_orig_cols,SE_orig_cols,n_studies,yi,sei,keep,fit,yi_orig,sei_orig,logFC_meta,
+   falhas,gene_symbols)
+gc()
 
 # ============== TRATAMENTO DE DADOS E ESTIMAÇÃO DE DEGS ==============
 # Nesta seção foi utilizado os resultados da meta-análise para calcular o valor
@@ -215,13 +228,9 @@ DEGs <- subset(results,
                abs(logFC_meta) > 1 & FDR < 0.05)
 cat(paste0("Foram obtidos ",nrow(DEGs)," genes diferencialmente expressos!\n"))
 
-# filtando pelo resultado de I²
-DEGs_filtered <- subset(DEGs,DEGs$I2==0)
-cat(paste0("Foram obtidos ",nrow(DEGs_filtered)," genes diferencialmente expressos com I² igual a 0!\n"))
-
-# filtrando por up-regulated
-DEGs_filtered <- subset(DEGs_filtered,DEGs_filtered$logFC_meta>=1)
-cat(paste0("Foram obtidos ",nrow(DEGs_filtered)," genes diferencialmente expressos up-regulados e com I² igual a 0!\n"))
+# filtrando por up-regulated e I²<50%
+DEGs_filtered <- subset(DEGs, logFC_meta >= 1 & I2 <= 50)
+cat(paste0("Foram obtidos ",nrow(DEGs_filtered)," genes diferencialmente expressos up-regulados e com I² menor que 50%!\n"))
 
 # Salvando dados
 # confeindo rapidamente se a pasta de salvamento está pronta
@@ -340,7 +349,6 @@ genes_degs <- unique(DEGs$Gene)
 # lista de todos os genes como universo
 genes_background <- unique(results$Gene)
 
-
 ## ==== GO ENRICHMENT ====
 
 # biological process
@@ -355,46 +363,8 @@ ego_bp <- enrichGO(
   readable      = TRUE
 )
 
-ego_bp <- simplify(
+ego_bp <- clusterProfiler::simplify(
   ego_bp,
-  cutoff = 0.7,
-  by = "p.adjust",
-  select_fun = min
-)
-
-# celular component
-ego_cc <- enrichGO(
-  gene = genes_degs,
-  universe = genes_background,
-  OrgDb = org.Hs.eg.db,
-  keyType = "ENTREZID",
-  ont = "CC",
-  pAdjustMethod = "BH",
-  pvalueCutoff = 0.05,
-  readable = TRUE
-)
-
-ego_cc <- simplify(
-  ego_cc,
-  cutoff = 0.7,
-  by = "p.adjust",
-  select_fun = min
-)
-
-# molecular function
-ego_mf <- enrichGO(
-  gene = genes_degs,
-  universe = genes_background,
-  OrgDb = org.Hs.eg.db,
-  keyType = "ENTREZID",
-  ont = "MF",
-  pAdjustMethod = "BH",
-  pvalueCutoff = 0.05,
-  readable = TRUE
-)
-
-ego_mf <- simplify(
-  ego_mf,
   cutoff = 0.7,
   by = "p.adjust",
   select_fun = min
@@ -402,7 +372,7 @@ ego_mf <- simplify(
 
 ## ==== KEGG ====
 
-ekegg <- enrichKEGG(
+ekegg <- clusterProfiler::enrichKEGG(
   gene         = genes_degs,
   universe     = genes_background,
   organism     = "hsa",
@@ -449,8 +419,6 @@ check_genes <- function(enrich_result, genes_degs_symbol) {
 }
 
 bp_DEGs    <- check_genes(ego_bp, genes_degs_symbol)
-cc_DEGs    <- check_genes(ego_cc, genes_degs_symbol)
-mf_DEGs    <- check_genes(ego_mf, genes_degs_symbol)
 kegg_DEGs  <- check_genes(ekegg, genes_degs_symbol)
 react_DEGs <- check_genes(ereact, genes_degs_symbol)
 
@@ -458,8 +426,6 @@ react_DEGs <- check_genes(ereact, genes_degs_symbol)
 # unindo as vias enriquecidas
 all_pathways <- bind_rows(
   bp_DEGs %>% mutate(Database = "GO_BP"),
-  cc_DEGs %>% mutate(Database = "GO_CC"),
-  mf_DEGs %>% mutate(Database = "GO_MF"),
   kegg_DEGs %>% mutate(Database = "KEGG"),
   react_DEGs %>% mutate(Database = "REACTOME")
 )
@@ -471,10 +437,6 @@ all_pathways_filtered <- all_pathways %>%
 # ordenando vias mais significativas
 all_pathways_filtered <- all_pathways_filtered %>%
   arrange(p.adjust)
-# top vias por base de dados
-top_pathways <- all_pathways_filtered %>%
-  group_by(Database) %>%
-  slice_min(order_by = p.adjust, n = 10)
 
 # explodindo genes das vias
 all_pathways_long <- all_pathways_filtered %>%
@@ -514,7 +476,7 @@ write.csv(
 
 ## ==== PLOTS ====
 
-# dotplots
+## dotplots
 png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_bp, showCategory = 20)
 dev.off()
@@ -527,10 +489,11 @@ png(file.path(figures_dir, "REACTOME_dotplot.png"), width = 3000, height = 2000,
 dotplot(ereact, showCategory = 20)
 dev.off()
 
-# cnetplots
+## cnetplots
 gene_fc <- DEGs$logFC_meta
 names(gene_fc) <- DEGs$Symbol
 
+# GO Biologiacal Process
 png(file.path(figures_dir, "GO_BP_cnetplot.png"),width = 3500,height = 3000,res = 450)
 enrichplot::cnetplot(
   ego_bp,
@@ -553,6 +516,7 @@ enrichplot::cnetplot(
   )
 dev.off()
 
+# reactome
 png(file.path(figures_dir, "REACTOME_cnetplot.png"),width = 3500,height = 3000,res = 450)
 enrichplot::cnetplot(
   ereact,
@@ -574,13 +538,15 @@ enrichplot::cnetplot(
   )
 dev.off()
 
-
+#limpando
+rm(genes_degs,genes_background,ego_bp,ekegg,ereact,check_genes,bp_DEGs,kegg_DEGs,react_DEGs,all_pathways,
+   all_pathways_long)
+gc()
 
 # ============== PPI NETWORK ==============
 # análise de rede de interação proteína-proteína dos genes diferencialmente expressos
 # com o objetivo de encontrar "hub genes", genes centrais na rede tumoral ou que
 # parecem coordenar múltiplos processos.
-
 
 # Incializando o STRING
 string_db <- STRINGdb$new(version="12.0", 
@@ -610,9 +576,6 @@ colnames(node_degree) <- c("STRING_id", "degree")
 hubs_table <- merge(degs_filtered, node_degree, by="STRING_id") %>%
   arrange(desc(degree))
 
-# limpando
-rm(degs_mapped,all_nodes,node_degree)
-gc()
 
 ## checando se o diretório existe
 out_dir <- file.path(results_dir, "ppi")
@@ -632,4 +595,8 @@ dev.off()
 
 ## ==== Resultados ====
 write.csv(interactions, file.path(results_dir, "ppi",  "string_interactions_edges.csv"), row.names = FALSE)
-write.csv(degs_filtered, file.path(results_dir, "ppi",  "string_nodes_metadata.csv"), row.names = FALSE)
+write.csv(hubs_table, file.path(results_dir, "ppi",  "string_nodes_metadata.csv"), row.names = FALSE)
+
+# limpando
+rm(degs_mapped,all_nodes,node_degree,string_db,degs_filtered)
+gc()
