@@ -77,7 +77,7 @@ for (script in scripts_projetos) {
 }
 
 #limpando
-rm(scripts_projetos,script,nome_objeto)
+rm(scripts_projetos,script,nome_objeto,id_atual)
 gc()
 
 # ============== PREPARAÇÃO PARA META-ANÁLISE ==============
@@ -209,7 +209,7 @@ results <- results[!is.na(results$Symbol), ]
 
 # limpando
 rm(logFC_cols,SE_cols,logFC_orig_cols,SE_orig_cols,n_studies,yi,sei,keep,fit,yi_orig,sei_orig,logFC_meta,
-   falhas,gene_symbols)
+   falhas,gene_symbols,meta_gene)
 gc()
 
 # ============== TRATAMENTO DE DADOS E ESTIMAÇÃO DE DEGS ==============
@@ -229,8 +229,7 @@ DEGs <- subset(results,
 cat(paste0("Foram obtidos ",nrow(DEGs)," genes diferencialmente expressos!\n"))
 
 # filtrando por up-regulated e I²<50%
-DEGs_filtered <- subset(DEGs, logFC_meta >= 1 & I2 <= 50)
-cat(paste0("Foram obtidos ",nrow(DEGs_filtered)," genes diferencialmente expressos up-regulados e com I² menor que 50%!\n"))
+DEGs_filtered <- subset(DEGs, I2 <= 50)
 
 # Salvando dados
 # confeindo rapidamente se a pasta de salvamento está pronta
@@ -453,28 +452,8 @@ enrichment_scores <- all_pathways_long %>%
   ) %>%
   arrange(desc(n_vias), best_padj)
 
-## ==== EXPORTANDO DADOS ====
 
-# confeindo rapidamente se a pasta de salvamento está pronta
-out_dir <- file.path(results_dir, "enrichment")
-if (!dir.exists(out_dir)) {
-  dir.create(out_dir, recursive = TRUE)
-}
-rm(out_dir)
-
-write.csv(
-  all_pathways_filtered,
-  file.path(results_dir, "enrichment", "all_enriched_pathways.csv"),
-  row.names = FALSE
-)
-
-write.csv(
-  enrichment_scores,
-  file.path(results_dir, "enrichment",  "gene_enrichment_scores.csv"),
-  row.names = FALSE
-)
-
-## ==== PLOTS ====
+## ==== plots ====
 
 ## dotplots
 png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
@@ -538,10 +517,33 @@ enrichplot::cnetplot(
   )
 dev.off()
 
+
+## ==== Exportando dados ====
+
+# confeindo rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(results_dir, "enrichment")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
+
+write.csv(
+  all_pathways_filtered,
+  file.path(results_dir, "enrichment", "all_enriched_pathways.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  enrichment_scores,
+  file.path(results_dir, "enrichment",  "gene_enrichment_scores.csv"),
+  row.names = FALSE
+)
+
 #limpando
 rm(genes_degs,genes_background,ego_bp,ekegg,ereact,check_genes,bp_DEGs,kegg_DEGs,react_DEGs,all_pathways,
-   all_pathways_long)
+   all_pathways_long,gene_fc)
 gc()
+
 
 # ============== PPI NETWORK ==============
 # análise de rede de interação proteína-proteína dos genes diferencialmente expressos
@@ -585,7 +587,7 @@ if (!dir.exists(out_dir)) {
 rm(out_dir)
 
 
-## ==== PLOT ====
+## ==== plot ====
 png(file.path(figures_dir, "ppi_DEGs_TCC_2026.png"),width = 5000,height = 4000,res = 600)
 
 par(mar = c(1,1,3,1),cex = 1.4,lwd = 2)
@@ -593,10 +595,42 @@ string_db$plot_network(hubs_table$STRING_id)
 
 dev.off()
 
-## ==== Resultados ====
+## ==== Exportando dados ====
 write.csv(interactions, file.path(results_dir, "ppi",  "string_interactions_edges.csv"), row.names = FALSE)
 write.csv(hubs_table, file.path(results_dir, "ppi",  "string_nodes_metadata.csv"), row.names = FALSE)
 
 # limpando
-rm(degs_mapped,all_nodes,node_degree,string_db,degs_filtered)
+rm(degs_mapped,all_nodes,node_degree,string_db,degs_filtered,hits)
 gc()
+
+
+# ============== Validação no TCGA ==============
+
+recount <- new.env()
+source(file.path(scripts_dir,"TCGA + GTex validation.r"),local = recount)
+validation_results <- get("results", envir = recount)
+rm(recount)
+gc()
+
+# ============== COMPILAÇÃO DE RESULTADOS ==============
+
+compiled_results <- data_frame("Entrez"=results$Gene,
+                   "Gene_Symbol"=results$Symbol,
+                   "LogFC"=results$logFC_meta,
+                   "adjusted_p.value"=results$FDR,
+                   "I2"=results$I2)
+
+compiled_results <- subset(compiled_results,
+                           abs(LogFC)>=1 &
+                           adjusted_p.value<0.05&
+                           I2<=50)
+
+
+
+
+
+
+
+
+
+

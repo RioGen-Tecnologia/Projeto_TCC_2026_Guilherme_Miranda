@@ -24,6 +24,8 @@ library(ReactomePA) #enriquecimento funcional (Reactome)
 library(enrichplot) #pacote de gráficos de enriquecimento
 library(STRINGdb) #pacote de rede PPi
 library(igraph) #complemento do grafico de rede PPI
+library(recount3) #base de dados de TCGA + GTex padronizados
+library(edgeR) #complemento aos dados do TCGA + GTex
 
 # complementos a outros pacotes
 library(R.utils) #ferramentas do R
