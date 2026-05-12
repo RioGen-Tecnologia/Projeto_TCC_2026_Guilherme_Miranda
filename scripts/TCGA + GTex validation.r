@@ -3,6 +3,8 @@
 # como validação de análise principal
 # Guilherme Moret Miranda - Riogen
 # 11/05/2026
+# padronização do Recount3: monorail
+# análise estatística: limma (voom)
 
 message("\n", paste(rep("=", 30), collapse = ""))
 message("Baixando dados do recount3")
@@ -146,19 +148,6 @@ colnames(results) <- c(
   "p.Value_val",
   "FDR_val",
   "B_val"
-)
-# exportando dados
-# confere rapidamente se a pasta de salvamento está pronta
-out_dir <- file.path(results_dir, "TCGA + GTex validation")
-if (!dir.exists(out_dir)) {
-  dir.create(out_dir, recursive = TRUE)
-}
-rm(out_dir)
-
-write.csv(
-  results,
-  file = file.path(results_dir, 'TCGA + GTex validation', "validation_analysis_results.csv"),
-  row.names = TRUE
 )
 
 message("\n", paste(rep("=", 30), collapse = ""))

@@ -605,16 +605,39 @@ gc()
 
 
 # ============== Validação no TCGA ==============
+# aqui é feito uma análise diferencial de dados padronizados de RNA-seq da base de
+# dados Recount3 que possui amostras BLCA tumorais do TCGA e amostras não-tumorais
+# de bexiga do GTex padronizadas por monorail. Os dados pré-processados foram
+# extraídos e análisados por limma (voom) para servirem como validação dos resultados.
 
+# rodando o script em novo ambiente e extraíndo os resultados
 recount <- new.env()
 source(file.path(scripts_dir,"TCGA + GTex validation.r"),local = recount)
 validation_results <- get("results", envir = recount)
 rm(recount)
 gc()
 
+# filtando os resultados de validação com os genes da análise principal
+validation_results_filtered <- validation_results[
+  rownames(validation_results) %in% as.character(DEGs_filtered$Gene),
+]
+
+#salvando os dados
+# confere rapidamente se a pasta de salvamento está pronta
+out_dir <- file.path(results_dir, "TCGA + GTex validation")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
+
+write.csv(validation_results,
+          file.path(results_dir, 'TCGA + GTex validation', "validation_analysis_results.csv"),row.names = TRUE)
+write.csv(validation_results_filtered,
+          file.path(results_dir,"TCGA + GTex validation","validation_analysis_comparison.csv"),row.names = TRUE)
+
 # ============== COMPILAÇÃO DE RESULTADOS ==============
 
-compiled_results <- data_frame("Entrez"=results$Gene,
+compiled_results <- tibble("Entrez"=results$Gene,
                    "Gene_Symbol"=results$Symbol,
                    "LogFC"=results$logFC_meta,
                    "adjusted_p.value"=results$FDR,
