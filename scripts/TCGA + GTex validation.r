@@ -139,16 +139,32 @@ cont.matrix <- makeContrasts(
 fit2 <- contrasts.fit(fit, cont.matrix)
 fit2 <- eBayes(fit2)
 
+## arrumando dados de expressão para análise ROC/AUC
+# criando anotação se amostra é tumoral ou não (amostras saudáveis GTex e adjacentes TCGA )
+group <- dge$samples$condition
+group_roc <- ifelse(group == "Tumor",
+                    "tumor",
+                    "non_tumor")
+
+group_roc <- factor(group_roc, levels = c("non_tumor", "tumor"))
+
+#conferindo se está alinhado
+if (!all(colnames(v$E) == rownames(dge$samples))) {
+  stop("Erro: Anotação não está alinhada!")
+}
+
 # --- 5. EXTRAÇÃO DE RESULTADOS PARA META-ANÁLISE ---
-results <- topTable(fit2, coef = "TumorVsHealthy", number = Inf, sort.by = "none")
-colnames(results) <- c(
-  "logFC_val",
-  "AveExpr_val",
-  "t_val",
-  "p.Value_val",
-  "FDR_val",
-  "B_val"
-)
+results <- topTable(fit2,
+                    coef = "TumorVsHealthy",
+                    number = Inf,
+                    sort.by = "none")
+
+colnames(results) <- c( "logFC_val",
+                        "AveExpr_val",
+                        "t_val",
+                        "p.Value_val",
+                        "FDR_val",
+                        "B_val" )
 
 message("\n", paste(rep("=", 30), collapse = ""))
 message("Análise finalizada")

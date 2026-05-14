@@ -1,6 +1,7 @@
 # ============== CARREGANDO PACOTES ==============
 
 library(here) #pacote "aqui" auxilia com diretórios
+library(R.utils) #ferramentas do R, permite usar gunzip
 library(GEOquery) #busca e download de datasets do Gene Omnibus
 library(affy) #pacote de normalização affymetrix
 library(oligo) #pacote de normalização oligo
@@ -18,6 +19,7 @@ library(org.Hs.eg.db) #pacote de base de anotação
 library(metafor) #pacote de meta-análise
 library(ggplot2) #pacote de gráficos de expressão
 library(dplyr) #gerenciamento de dataframes
+library(tibble) #gerenciamento de dataframes
 library(tidyr) #gerenciamento de dataframes
 library(clusterProfiler) #enriquecimento funcional (GO e KEGG)
 library(ReactomePA) #enriquecimento funcional (Reactome)
@@ -26,9 +28,10 @@ library(STRINGdb) #pacote de rede PPi
 library(igraph) #complemento do grafico de rede PPI
 library(recount3) #base de dados de TCGA + GTex padronizados
 library(edgeR) #complemento aos dados do TCGA + GTex
+library(pROC) #análise ROC/AUC
+library(scales) #complemento para pontuação de biomarcadores
 
 # complementos a outros pacotes
-library(R.utils) #ferramentas do R
 library(Biobase)
 library(BiocGenerics)
 library(generics)

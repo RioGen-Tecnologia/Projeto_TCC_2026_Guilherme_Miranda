@@ -200,6 +200,7 @@ metafor_GSE3167 <- data.frame(
 )
 
 # ====== Salvar arquivo ======
+## input metafor
 
 # confere se o pData e matriz estão realmente alinhados
 all(rownames(norm_corrigido_GSE3167) == rownames(metadata))
@@ -218,4 +219,43 @@ write.csv(
   row.names = TRUE
 )
 
+## DEGs identificados nesse projeto
 
+# extração dos resultados do limma
+logFC <- fit2$coefficients[, "Tumor_vs_NonTumor"]
+
+# p-value bruto
+p_value <- fit2$p.value[, "Tumor_vs_NonTumor"]
+
+# ajuste FDR (Benjamini-Hochberg)
+FDR <- p.adjust(p_value, method = "BH")
+
+# classificação de significância
+significance <- ifelse(
+  abs(logFC) > 1 & FDR < 0.05,
+  "significant",
+  "not significant"
+)
+
+# dataframe final
+deg_GSE3167 <- data.frame(
+  ENTREZID = rownames(fit2$coefficients),
+  logFC = logFC,
+  p.value = p_value,
+  FDR = FDR,
+  significance = significance,
+  stringsAsFactors = FALSE
+)
+
+# remove genes sem ENTREZID
+deg_GSE3167 <- deg_GSE3167[!is.na(deg_GSE3167$ENTREZID), ]
+
+# opcional: ordenar por FDR
+deg_GSE3167 <- deg_GSE3167[order(deg_GSE3167$FDR), ]
+
+# salvar
+write.csv(
+  deg_GSE3167,
+  file = file.path(results_dir, "DEGs_tables", "DEGs_GSE3167.csv"),
+  row.names = FALSE
+)
