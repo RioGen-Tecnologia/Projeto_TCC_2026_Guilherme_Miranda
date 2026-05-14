@@ -7,6 +7,11 @@
 # para determinar biomarcadores gênicos de câncer de bexiga.
 
 # ============== CARREGANDO PACOTES ==============
+
+message("================================")
+message("CARREGANDO PACOTES")
+message("================================")
+
 library(here)
 source(here("scripts", "setup.r"))
 
@@ -50,6 +55,9 @@ gc()
 # Esta sessão executa os scripts secundários que extrem os dados do GEO, normalizam,
 # anotam e análisam estatísticamente por limma cada um dos projetos.
 
+message("================================")
+message("ANALISANDO DATASETS")
+message("================================")
 
 # Lista scripts que começam com "GSE"
 scripts_projetos <- list.files(
@@ -100,6 +108,11 @@ gc()
 
 # 1. Preparar a lista convertendo rownames em uma coluna temporária
 # Isso evita que o R perca os IDs durante o merge
+
+message("================================")
+message("PREPARANDO DADOS PARA META-ANÁLISE")
+message("================================")
+
 entrez <- lapply(arquivos_metafor, function(df) {
   df$EntrezID <- rownames(df)
   return(df)
@@ -186,10 +199,18 @@ meta_gene <- function(i){
   return(out)
 }
 
+message("================================")
+message("REALIZANDO META-ANÁLISE...")
+message("================================")
+
 # rodar para todos os genes
 results <- t(sapply(1:nrow(metafor_filtered), meta_gene))
 falhas <- sum(is.na(results[,1]))
 cat(paste0(falhas," (",round((falhas/nrow(metafor_filtered))*100,2),"%) genes falharam.\n"))
+
+message("================================")
+message("META-ANÁLISE FINALIZADA")
+message("================================")
 
 # transformar em dataframe
 results <- as.data.frame(results)
@@ -217,7 +238,7 @@ results$Symbol <- gene_symbols
 results <- results[!is.na(results$Symbol), ]
 
 # limpando
-rm(logFC_cols,SE_cols,logFC_orig_cols,SE_orig_cols,n_studies,yi,sei,keep,fit,yi_orig,sei_orig,logFC_meta,
+rm(logFC_cols,SE_cols,logFC_orig_cols,SE_orig_cols,n_studies,
    falhas,gene_symbols,meta_gene)
 gc()
 
@@ -271,7 +292,11 @@ write.csv(
 summary(results$I2)
 
 ## ==== HISTOGRAMA I² GLOBAL ====
-#pico 0: genes estáveis que não se expressam diferencialmente. pico perto de 100: genes de expressão variável 
+#pico 0: genes estáveis que não se expressam diferencialmente. pico perto de 100: genes de expressão variável
+
+message("================================")
+message("GERANDO GRÁFICOS DE EXPRESSÃO")
+message("================================")
 
 png(file.path(figures_dir, "histograma_Genes_totais_Bexiga.png"), width = 3000, height = 2000, res = 300)
 
@@ -359,6 +384,11 @@ genes_background <- unique(results$Gene)
 
 ## ==== GO ENRICHMENT ====
 
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("GENE ONTOLOGY - BIOLOGICAL PROCESS")
+message("====================================")
+
 # biological process
 ego_bp <- enrichGO(
   gene          = genes_degs,
@@ -380,6 +410,11 @@ ego_bp <- clusterProfiler::simplify(
 
 ## ==== KEGG ====
 
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("KEGG")
+message("====================================")
+
 ekegg <- clusterProfiler::enrichKEGG(
   gene         = genes_degs,
   universe     = genes_background,
@@ -392,6 +427,11 @@ ekegg <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
 
 ## ==== REACTOME ====
 
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("REACTOME")
+message("====================================")
+
 ereact <- enrichPathway(
   gene          = genes_degs,
   universe      = genes_background,
@@ -401,6 +441,11 @@ ereact <- enrichPathway(
 )
 
 ## alinhamento de genes robustos com vias funcionais enriquecidas
+
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("ANALISANDO GENES E VIAS")
+message("====================================")
 
 # colentando os genes robustos (heterogeneidade e up-regulados)
 genes_degs_symbol <- unique(DEGs$Symbol)
@@ -463,6 +508,11 @@ enrichment_scores <- all_pathways_long %>%
 
 
 ## ==== plots ====
+
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("GERANDO GRÁFICOS DE ENRIQUECIMENTO")
+message("====================================")
 
 ## dotplots
 png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
@@ -529,6 +579,11 @@ dev.off()
 
 ## ==== Exportando dados ====
 
+message("====================================")
+message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
+message("EXPORTANDO DADOS")
+message("====================================")
+
 # confeindo rapidamente se a pasta de salvamento está pronta
 out_dir <- file.path(results_dir, "enrichment")
 if (!dir.exists(out_dir)) {
@@ -559,11 +614,21 @@ gc()
 # com o objetivo de encontrar "hub genes", genes centrais na rede tumoral ou que
 # parecem coordenar múltiplos processos.
 
+message("====================================")
+message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("INICIANDO STRING")
+message("====================================")
+
 # Incializando o STRING
 string_db <- STRINGdb$new(version="12.0", 
                           species=9606, # _Homo sapiens_
                           score_threshold=400, 
                           input_directory="")
+
+message("====================================")
+message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("MAPEANDO GENES E INBTRERAÇÕES")
+message("====================================")
 
 # Mapeando genes diferencialmente expressos pelos Entrez IDs
 degs_mapped <- string_db$map(DEGs, "Gene", removeUnmappedRows = TRUE)
@@ -583,10 +648,14 @@ all_nodes <- c(interactions$from, interactions$to)
 node_degree <- as.data.frame(table(all_nodes))
 colnames(node_degree) <- c("STRING_id", "degree")
 
+message("====================================")
+message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("CALCULANDO HUB GENES")
+message("====================================")
+
 # Mesclar com os dados originais
 hubs_table <- merge(degs_filtered, node_degree, by="STRING_id") %>%
   arrange(desc(degree))
-
 
 ## checando se o diretório existe
 out_dir <- file.path(results_dir, "ppi")
@@ -595,6 +664,10 @@ if (!dir.exists(out_dir)) {
 }
 rm(out_dir)
 
+message("====================================")
+message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("GERANDO GRÁFICO E EXPORTANDO DADOS")
+message("====================================")
 
 ## ==== plot ====
 png(file.path(figures_dir, "ppi_DEGs_TCC_2026.png"),width = 5000,height = 4000,res = 600)
@@ -617,6 +690,11 @@ gc()
 # é extraído e análisado em quantos datasets os genes foram considerados significativos
 # e em quantos estavam presentes para evitar viés.
 # Cálculo: (datasets signficativos / datasets totais) * (datasets presentes / datasets totais)
+
+message("====================================")
+message("ANÁLISANDO A SIGNIFICÂNCIA E A ")
+message("PRENÇA DE GENES ENTRE DATASETS...")
+message("====================================")
 
 # criar lista temporária com apenas gene + significance
 lista_significance <- lapply(names(arquivos_deg), function(projeto) {
@@ -689,6 +767,11 @@ gc()
 # de bexiga do GTex padronizadas por monorail. Os dados pré-processados foram
 # extraídos e análisados por limma (voom) para servirem como validação dos resultados.
 
+message("====================================")
+message("INICIANDO ANÁLISE DE VALIDAÇÃO...")
+message("BASE DE DADOS TCGA X GTEX")
+message("====================================")
+
 # rodando o script em novo ambiente e extraíndo os resultados
 recount <- new.env()
 source(file.path(scripts_dir,"TCGA + GTex validation.r"),local = recount)
@@ -723,6 +806,9 @@ write.csv(validation_results_filtered,
 # resume e escala os dados ROC para serem usados como critério de qualidade
 # do gene como candidato a biomarcador.
 
+message("====================================")
+message("ANÁLISANDO CURVAS ROC E AUC...")
+message("====================================")
 
 # Criar labels binários (tumor/não-tumor)
 labels <- ifelse(group_roc == "tumor", 1, 0)
@@ -750,6 +836,10 @@ gc()
 
 # ============== COMPILAÇÃO DE RESULTADOS ==============
 # Unindo todos os resultados para fazer a pontuação.
+
+message("====================================")
+message("COMPILANDO RESULTADOS")
+message("====================================")
 
 # criando dataframe dos resultados compilados
 compiled_results <- tibble("Entrez"=DEGs_filtered$Gene,
@@ -812,6 +902,10 @@ compiled_results$PPI_degree[is.na(compiled_results$PPI_degree)] <- 0
 # ============== PONTUAÇÃO ==============
 # fase final da análise. Baseado nas análises feitas como critérios cada gene será
 # pontuado num ranking de melhores candidatos a biomarcadores.
+
+message("====================================")
+message("IDENTIFCANDO BIOMARCADORES...")
+message("====================================")
 
 # Função para normalizar variáveis de cada critério para escala 0–1
 safe_rescale <- function(x, to = c(0,1)) {
@@ -973,4 +1067,20 @@ rm(out_dir)
 
 ranked_results_clean <- ranked_results[,c((1:10),26)]
 
+message("=======================================")
+message("EXPORTANDO RESULTADOS DE BIOMARCADOERES")
+message("=======================================")
+
 write.csv(ranked_results_clean,file.path(results_dir,"biomarker_results","Bladder_cancer_biomarker_rank.csv"))
+
+# ===== SESSION INFO =====
+writeLines(
+  capture.output(sessionInfo()),
+  file.path(results_dir, "sessionInfo.txt")
+)
+
+gc()
+
+message("====================================")
+message("ANÁLISE FINALIZADA!")
+message("====================================")
