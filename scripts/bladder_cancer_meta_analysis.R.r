@@ -720,7 +720,7 @@ cols_significance <- grep(
 )
 
 # número total de datasets (8)
-n_total <- 8
+n_total <- 7
 
 # número de datasets significativos
 n_significant <- apply(
