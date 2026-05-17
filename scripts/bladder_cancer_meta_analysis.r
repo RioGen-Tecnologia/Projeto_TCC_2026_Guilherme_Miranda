@@ -8,9 +8,9 @@
 
 # ============== CARREGANDO PACOTES ==============
 
-message("================================")
+message("===========================================================================")
 message("CARREGANDO PACOTES")
-message("================================")
+message("===========================================================================")
 
 library(here)
 source(here("scripts", "setup.r"))
@@ -55,9 +55,9 @@ gc()
 # Esta sessão executa os scripts secundários que extrem os dados do GEO, normalizam,
 # anotam e análisam estatísticamente por limma cada um dos projetos.
 
-message("================================")
+message("===========================================================================")
 message("ANALISANDO DATASETS")
-message("================================")
+message("===========================================================================")
 
 # Lista scripts que começam com "GSE"
 scripts_projetos <- list.files(
@@ -109,9 +109,9 @@ gc()
 # 1. Preparar a lista convertendo rownames em uma coluna temporária
 # Isso evita que o R perca os IDs durante o merge
 
-message("================================")
+message("===========================================================================")
 message("PREPARANDO DADOS PARA META-ANÁLISE")
-message("================================")
+message("===========================================================================")
 
 entrez <- lapply(arquivos_metafor, function(df) {
   df$EntrezID <- rownames(df)
@@ -199,18 +199,18 @@ meta_gene <- function(i){
   return(out)
 }
 
-message("================================")
+message("===========================================================================")
 message("REALIZANDO META-ANÁLISE...")
-message("================================")
+message("===========================================================================")
 
 # rodar para todos os genes
 results <- t(sapply(1:nrow(metafor_filtered), meta_gene))
 falhas <- sum(is.na(results[,1]))
 cat(paste0(falhas," (",round((falhas/nrow(metafor_filtered))*100,2),"%) genes falharam.\n"))
 
-message("================================")
+message("===========================================================================")
 message("META-ANÁLISE FINALIZADA")
-message("================================")
+message("===========================================================================")
 
 # transformar em dataframe
 results <- as.data.frame(results)
@@ -294,9 +294,9 @@ summary(results$I2)
 ## ==== HISTOGRAMA I² GLOBAL ====
 #pico 0: genes estáveis que não se expressam diferencialmente. pico perto de 100: genes de expressão variável
 
-message("================================")
+message("===========================================================================")
 message("GERANDO GRÁFICOS DE EXPRESSÃO")
-message("================================")
+message("===========================================================================")
 
 png(file.path(figures_dir, "histograma_Genes_totais_Bexiga.png"), width = 3000, height = 2000, res = 300)
 
@@ -384,10 +384,10 @@ genes_background <- unique(results$Gene)
 
 ## ==== GO ENRICHMENT ====
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("GENE ONTOLOGY - BIOLOGICAL PROCESS")
-message("====================================")
+message("===========================================================================")
 
 # biological process
 ego_bp <- enrichGO(
@@ -410,10 +410,10 @@ ego_bp <- clusterProfiler::simplify(
 
 ## ==== KEGG ====
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("KEGG")
-message("====================================")
+message("===========================================================================")
 
 ekegg <- clusterProfiler::enrichKEGG(
   gene         = genes_degs,
@@ -427,10 +427,10 @@ ekegg <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
 
 ## ==== REACTOME ====
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("REACTOME")
-message("====================================")
+message("===========================================================================")
 
 ereact <- enrichPathway(
   gene          = genes_degs,
@@ -442,10 +442,10 @@ ereact <- enrichPathway(
 
 ## alinhamento de genes robustos com vias funcionais enriquecidas
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("ANALISANDO GENES E VIAS")
-message("====================================")
+message("===========================================================================")
 
 # colentando os genes robustos (heterogeneidade e up-regulados)
 genes_degs_symbol <- unique(DEGs$Symbol)
@@ -509,10 +509,10 @@ enrichment_scores <- all_pathways_long %>%
 
 ## ==== plots ====
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("GERANDO GRÁFICOS DE ENRIQUECIMENTO")
-message("====================================")
+message("===========================================================================")
 
 ## dotplots
 png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
@@ -579,10 +579,10 @@ dev.off()
 
 ## ==== Exportando dados ====
 
-message("====================================")
+message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
 message("EXPORTANDO DADOS")
-message("====================================")
+message("===========================================================================")
 
 # confeindo rapidamente se a pasta de salvamento está pronta
 out_dir <- file.path(results_dir, "enrichment")
@@ -614,10 +614,10 @@ gc()
 # com o objetivo de encontrar "hub genes", genes centrais na rede tumoral ou que
 # parecem coordenar múltiplos processos.
 
-message("====================================")
-message("ANÁLISE PROTEN-PROTEIN INTERACTION")
-message("INICIANDO STRING")
-message("====================================")
+message("===========================================================================")
+message("ANÁLISE PROTEIN-PROTEIN INTERACTION")
+message("INICIANDO STRINGdb")
+message("===========================================================================")
 
 # Incializando o STRING
 string_db <- STRINGdb$new(version="12.0", 
@@ -625,10 +625,10 @@ string_db <- STRINGdb$new(version="12.0",
                           score_threshold=400, 
                           input_directory="")
 
-message("====================================")
-message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("===========================================================================")
+message("ANÁLISE PROTEIN-PROTEIN INTERACTION")
 message("MAPEANDO GENES E INBTRERAÇÕES")
-message("====================================")
+message("===========================================================================")
 
 # Mapeando genes diferencialmente expressos pelos Entrez IDs
 degs_mapped <- string_db$map(DEGs, "Gene", removeUnmappedRows = TRUE)
@@ -648,10 +648,10 @@ all_nodes <- c(interactions$from, interactions$to)
 node_degree <- as.data.frame(table(all_nodes))
 colnames(node_degree) <- c("STRING_id", "degree")
 
-message("====================================")
-message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("===========================================================================")
+message("ANÁLISE PROTEIN-PROTEIN INTERACTION")
 message("CALCULANDO HUB GENES")
-message("====================================")
+message("===========================================================================")
 
 # Mesclar com os dados originais
 hubs_table <- merge(degs_filtered, node_degree, by="STRING_id") %>%
@@ -664,10 +664,10 @@ if (!dir.exists(out_dir)) {
 }
 rm(out_dir)
 
-message("====================================")
-message("ANÁLISE PROTEN-PROTEIN INTERACTION")
+message("===========================================================================")
+message("ANÁLISE PROTEIN-PROTEIN INTERACTION")
 message("GERANDO GRÁFICO E EXPORTANDO DADOS")
-message("====================================")
+message("===========================================================================")
 
 ## ==== plot ====
 png(file.path(figures_dir, "ppi_DEGs_TCC_2026.png"),width = 5000,height = 4000,res = 600)
@@ -691,10 +691,9 @@ gc()
 # e em quantos estavam presentes para evitar viés.
 # Cálculo: (datasets signficativos / datasets totais) * (datasets presentes / datasets totais)
 
-message("====================================")
-message("ANÁLISANDO A SIGNIFICÂNCIA E A ")
-message("PRENÇA DE GENES ENTRE DATASETS...")
-message("====================================")
+message("===========================================================================")
+message("ANALISANDO A SIGNIFICANCIA E A PRESENÇA DE GENES ENTRE DATASETS... ")
+message("===========================================================================")
 
 # criar lista temporária com apenas gene + significance
 lista_significance <- lapply(names(arquivos_deg), function(projeto) {
@@ -767,10 +766,10 @@ gc()
 # de bexiga do GTex padronizadas por monorail. Os dados pré-processados foram
 # extraídos e análisados por limma (voom) para servirem como validação dos resultados.
 
-message("====================================")
+message("===========================================================================")
 message("INICIANDO ANÁLISE DE VALIDAÇÃO...")
-message("BASE DE DADOS TCGA X GTEX")
-message("====================================")
+message("BASE DE DADOS RECOUNT3 (TCGA / GTEX)")
+message("===========================================================================")
 
 # rodando o script em novo ambiente e extraíndo os resultados
 recount <- new.env()
@@ -806,9 +805,9 @@ write.csv(validation_results_filtered,
 # resume e escala os dados ROC para serem usados como critério de qualidade
 # do gene como candidato a biomarcador.
 
-message("====================================")
-message("ANÁLISANDO CURVAS ROC E AUC...")
-message("====================================")
+message("===========================================================================")
+message("ANALISANDO CURVAS ROC E AUC...")
+message("===========================================================================")
 
 # Criar labels binários (tumor/não-tumor)
 labels <- ifelse(group_roc == "tumor", 1, 0)
@@ -837,9 +836,9 @@ gc()
 # ============== COMPILAÇÃO DE RESULTADOS ==============
 # Unindo todos os resultados para fazer a pontuação.
 
-message("====================================")
+message("===========================================================================")
 message("COMPILANDO RESULTADOS")
-message("====================================")
+message("===========================================================================")
 
 # criando dataframe dos resultados compilados
 compiled_results <- tibble("Entrez"=DEGs_filtered$Gene,
@@ -903,9 +902,9 @@ compiled_results$PPI_degree[is.na(compiled_results$PPI_degree)] <- 0
 # fase final da análise. Baseado nas análises feitas como critérios cada gene será
 # pontuado num ranking de melhores candidatos a biomarcadores.
 
-message("====================================")
+message("===========================================================================")
 message("IDENTIFCANDO BIOMARCADORES...")
-message("====================================")
+message("===========================================================================")
 
 # Função para normalizar variáveis de cada critério para escala 0–1
 safe_rescale <- function(x, to = c(0,1)) {
@@ -1081,6 +1080,6 @@ writeLines(
 
 gc()
 
-message("====================================")
+message("===========================================================================")
 message("ANÁLISE FINALIZADA!")
-message("====================================")
+message("===========================================================================")
