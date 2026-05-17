@@ -111,7 +111,7 @@ git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Mirand
 cd Projeto_TCC_2026_Guilherme_Miranda
 ```
 
-Executar R, normalmente nesse diretório:
+Executar R:
 ```powershell
 # substitua "R-4.6.0" pela sua versão atual do R
 & "C:\Program Files\R\R-4.6.0\bin\x64\R.exe"
