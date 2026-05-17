@@ -93,7 +93,9 @@ sessionInfo()
 
 R Environment também está disponível
 
-# Execução e Reprodutibilidade
+---
+
+## Execução e Reprodutibilidade
 
 Clonar repositório:
 
@@ -113,7 +115,9 @@ Executar programa:
 source("scripts/bladder_cancer_meta_analysis.r")
 ```
 
-# Resultados principais
+---
+
+## Resultados principais
 
 ...
 
