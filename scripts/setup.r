@@ -13,7 +13,6 @@ library(hgu133a.db) #pacote de base de anotação
 library(hgu133acdf) #pacote de base de anotação
 library(hgu133plus2cdf) #pacote de base de anotação
 library(illuminaHumanv2.db) #pacote de base de anotação
-library(illuminaHumanv3.db) #pacote de base de anotação
 library(illuminaHumanv4.db) #pacote de base de anotação
 library(org.Hs.eg.db) #pacote de base de anotação
 library(metafor) #pacote de meta-análise
