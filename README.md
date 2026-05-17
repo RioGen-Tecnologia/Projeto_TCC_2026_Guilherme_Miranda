@@ -37,6 +37,11 @@ Este pipeline inclue:
 
 # Ferramentas e pacotes do R utilizados
 
+## Software utilizado
+
+- RStudio
+- Bioconductor
+
 ## Pacotes R principais
 
 ### Aquisição de dados
@@ -60,7 +65,7 @@ Este pipeline inclue:
 
 ### Meta-análise
 - metafor
-- 
+
 ### enriquecimento funcional
 - clusterProfiler
 - ReactomePA
@@ -75,3 +80,10 @@ Este pipeline inclue:
 
 ### Manipulação e visualização de dados
 - tidyverse (dplyr, tidyr, tibble, ggplot2)
+
+## Reproducibility
+
+Complete package versions and session information are available through:
+
+```r
+sessionInfo()
