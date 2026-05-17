@@ -100,7 +100,7 @@ R Environment também está disponível
 Clonar repositório:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Miranda.git
 ```
 
 Instalar dependências:
