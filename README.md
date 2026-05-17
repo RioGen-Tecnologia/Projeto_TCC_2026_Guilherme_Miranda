@@ -41,8 +41,9 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 
 ## Ferramentas de Software utilizadas
 
-- RStudio
-- Bioconductor
+- R (4.6.0)
+- RStudio (2026.4.0.526)
+- Bioconductor (3.23)
 
 ## Pacotes R principais
 
@@ -97,10 +98,52 @@ R Environment também está disponível
 
 ## Execução e Reprodutibilidade
 
-Clonar repositório:
+### Windows
+#### Pré-requisitos
+- Certifique-se de ter o [RTools](https://cran.r-project.org/bin/windows/Rtools/) instalado no sistema (necessário para compilação de pacotes de bioinformática no Windows).
+
+Clonar repositório pelo Powershell em diretório de preferência:
+
+```powershell
+# suporte de caminhos longos
+git config --global core.longpaths true
+git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Miranda.git
+cd Projeto_TCC_2026_Guilherme_Miranda
+```
+
+Executar R, normalmente nesse diretório:
+```powershell
+# substitua "R-4.6.0" pela sua versão atual do R
+& "C:\Program Files\R\R-4.6.0\bin\x64\R.exe"
+```
+
+Intalar dependências:
+
+```r
+renv::restore()
+```
+
+Executar programa:
+
+```r
+source("scripts/bladder_cancer_meta_analysis.r")
+```
+
+---
+
+### Linux
+
+Clonar repositório em diretório de preferência:
 
 ```bash
 git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Miranda.git
+cd Projeto_TCC_2026_Guilherme_Miranda
+```
+
+Iniciar R
+
+```bash
+R
 ```
 
 Instalar dependências:
