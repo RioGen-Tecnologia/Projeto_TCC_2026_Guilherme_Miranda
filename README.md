@@ -88,7 +88,7 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
      * Magnitude de expressão do gene pela análise de validação (logFC)
      * Significância estatística do gene pela análise de validação (p-value ajustado por FDR)
      * AUC do gene pela análise de validação
-     * Consistência entre datasets
+     * Consistência de significância e presença de genes entre datasets
      * Heterogeneidade do gene (I²)
      * Grau de interações em rede PPI
      * Concordância de direção de expressão do gene entre descobrimento e validação
