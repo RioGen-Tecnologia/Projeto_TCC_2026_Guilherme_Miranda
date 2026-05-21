@@ -829,8 +829,19 @@ roc_df <- do.call(rbind, roc_results)
 roc_filtered <- roc_df %>%
   filter(as.character(gene) %in% as.character(DEGs_filtered$Gene))
 
+## checando se o diretório existe
+out_dir <- file.path(results_dir, "auc")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+rm(out_dir)
+
+#salvando resultados
+write.csv(roc_filtered,
+          file.path(results_dir, 'auc',"auc.csv"))
+
 # limpando
-rm(roc_results)
+rm(roc_results,roc_df)
 gc()
 
 # ============== COMPILAÇÃO DE RESULTADOS ==============
