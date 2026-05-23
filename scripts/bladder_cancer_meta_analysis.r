@@ -776,9 +776,14 @@ recount <- new.env()
 source(file.path(scripts_dir,"TCGA + GTex validation.r"),local = recount)
 validation_results <- get("results", envir = recount)
 v <- get("v", envir = recount)
-validation_exprs <- v$E
 group_roc <- get("group_roc", envir = recount)
-rm(v,recount)
+group <- get("group", envir = recount)
+validation_exprs <- v$E
+# remover Normal_Adj
+keep_samples <- group != "Normal_Adj"
+validation_exprs <- validation_exprs[, keep_samples]
+group_roc <- group_roc[keep_samples]
+rm(v,group,keep_samples,recount)
 gc()
 
 # filtando os resultados de validação com os genes da análise principal
