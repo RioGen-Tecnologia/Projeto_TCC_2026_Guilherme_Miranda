@@ -845,8 +845,32 @@ rm(out_dir)
 write.csv(roc_filtered,
           file.path(results_dir, 'auc',"auc.csv"))
 
+
+## criando um plot de exemplo
+gene <- roc_filtered[1,1]
+values <- as.numeric(validation_exprs[gene,])
+roc_curve <- pROC::roc(labels, values)
+auc_value <- auc(roc_curve)
+png(file.path("results","auc",paste("ROC_curve_gene",gene,".png")),height = 1800, width = 1800,res = 300)
+ggroc(roc_curve) +
+  geom_abline(
+    intercept = 1,
+    slope = 1,
+    linetype = "dashed",
+    color = "gray"
+  ) +
+  ggtitle(paste("ROC curve - gene", gene)) +
+  annotate(
+    "text",
+    x = 0.65,
+    y = 0.2,
+    label = paste("AUC =", round(auc_value, 3))
+  ) +
+  theme_minimal()
+dev.off()
+
 # limpando
-rm(roc_results,roc_df)
+rm(roc_results,roc_df,gene,values,roc_curve,auc_value)
 gc()
 
 # ============== COMPILAÇÃO DE RESULTADOS ==============
