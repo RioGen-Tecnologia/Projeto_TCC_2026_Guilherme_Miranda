@@ -851,7 +851,7 @@ gene <- roc_filtered[1,1]
 values <- as.numeric(validation_exprs[gene,])
 roc_curve <- pROC::roc(labels, values)
 auc_value <- auc(roc_curve)
-png(file.path("results","auc",paste("ROC_curve_gene",gene,".png")),height = 1800, width = 1800,res = 300)
+png(file.path("figures",paste("ROC_curve_gene",gene,".png")),height = 1800, width = 1800,res = 300)
 ggroc(roc_curve) +
   geom_abline(
     intercept = 1,
