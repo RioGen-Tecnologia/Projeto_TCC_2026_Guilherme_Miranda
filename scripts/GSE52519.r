@@ -284,6 +284,12 @@ write.csv(
   row.names = TRUE
 )
 
+# arquivo de matriz de expressão
+saveRDS(norm_corrigido_GSE52519,
+        file = file.path(processed_dir,
+                         id_projeto,
+                         "exprs_GSE52519.rds"))
+
 ## DEGs identificados nesse projeto
 
 # extração dos resultados do limma

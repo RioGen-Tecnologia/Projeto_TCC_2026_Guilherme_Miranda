@@ -9,7 +9,6 @@ renv/library/
 tmp/
 cache/
 GDCdata/
-*.rds
 *.tar.gz
 MANIFEST.txt
 
