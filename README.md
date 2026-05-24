@@ -293,6 +293,8 @@ Muito obrigado a minha família, amigos, colegas e especialmente a RioGen por to
 
 <p align="center">
   <img width="624" height="392" alt="equipe_riogen" src="https://github.com/user-attachments/assets/976a2956-573b-4764-a5ee-2f702238fd41" />
+  <br>
+  <em>RioGen - 15 de abril de 2026</em>
 </p>
 
 ## Autor
