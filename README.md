@@ -21,6 +21,7 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 
 - Diferenças entre plataformas transcriptômicas podem introduzir viés residual
 - O estudo utiliza dados retrospectivos públicos
+- O estudo não discrimina amostras tumorais invasivas e não invasivas
 - A validação experimental ainda é necessária
 - A análise ROC/AUC foi realizada em coortes públicas
 
