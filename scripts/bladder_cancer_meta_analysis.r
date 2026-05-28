@@ -1120,6 +1120,200 @@ writeLines(
 
 gc()
 
+
+# ============== HEATMAPS ==============
+# foi feito um gráfico de heatmap para os 89 DEGs e top 20 genes candidatos a
+# biomarcador por pontuação.
+
+message("===========================================================================")
+message("GERANDO HEATMAPS!")
+message("===========================================================================")
+
+## organizando amostras
+
+# ordenar agrupando non-tumor e tumor
+
+sample_order <- order(group_roc)
+
+# aplicar ordenação
+exprs_ordered <- validation_exprs[, sample_order]
+group_ordered <- group_roc[sample_order]
+
+
+## HEATMAP DOS 89 GENES HOMOGÊNEOS
+
+# genes em ENTREZ
+genes_89 <- as.character(DEGs_filtered$Gene)
+
+# filtrar matriz
+heatmap_89 <- exprs_ordered[
+  rownames(exprs_ordered) %in% genes_89,
+]
+
+# ordenar linhas igual DEGs_filtered
+heatmap_89 <- heatmap_89[
+  match(genes_89, rownames(heatmap_89)),
+]
+
+# substituir ENTREZ por símbolo gênico
+rownames(heatmap_89) <- DEGs_filtered$Symbol
+
+# Z-score por gene
+heatmap_89_scaled <- t(
+  scale(
+    t(heatmap_89)
+  )
+)
+
+# remover possíveis NAs
+heatmap_89_scaled <- heatmap_89_scaled[
+  complete.cases(heatmap_89_scaled),
+]
+
+# anotação de grupos
+ha_89 <- HeatmapAnnotation(
+  Group = group_ordered
+)
+
+# salvar figura
+png(
+  file.path(
+    "figures",
+    "heatmap_89_genes.png"
+  ),
+  width = 3200,
+  height = 4200,
+  res = 400
+)
+
+Heatmap(
+  heatmap_89_scaled,
+  
+  name = "Z-score",
+  
+  top_annotation = ha_89,
+  
+  cluster_rows = TRUE,
+  
+  # NÃO clusterizar amostras
+  cluster_columns = FALSE,
+  
+  # separar grupos visualmente
+  column_split = group_ordered,
+  
+  show_column_names = FALSE,
+  
+  row_names_gp = gpar(fontsize = 8),
+  
+  column_title = "TCGA Tumor vs GTEx Healthy",
+  
+  heatmap_legend_param = list(
+    title = "Expression"
+  ),
+  
+  col = colorRamp2(
+    c(-2, 0, 2),
+    c("blue", "white", "red")
+  )
+)
+
+dev.off()
+
+## Heatmap dos top 20 biomarcadores
+
+# top 20 genes
+top20 <- ranked_results_clean$Entrez[1:20] %>%
+  as.character()
+
+# filtrar matriz
+heatmap_top20 <- exprs_ordered[
+  rownames(exprs_ordered) %in% top20,
+]
+
+# ordenar linhas
+heatmap_top20 <- heatmap_top20[
+  match(top20, rownames(heatmap_top20)),
+]
+
+# símbolos gênicos
+rownames(heatmap_top20) <- ranked_results_clean$Gene_Symbol[1:20]
+
+# Z-score
+heatmap_top20_scaled <- t(
+  scale(
+    t(heatmap_top20)
+  )
+)
+
+# remover NAs
+heatmap_top20_scaled <- heatmap_top20_scaled[
+  complete.cases(heatmap_top20_scaled),
+]
+
+# anotação
+ha_top20 <- HeatmapAnnotation(
+  Group = group_ordered
+)
+
+# salvar figura
+png(
+  file.path(
+    "figures",
+    "heatmap_top20_genes.png"
+  ),
+  width = 2600,
+  height = 2200,
+  res = 400
+)
+
+Heatmap(
+  heatmap_top20_scaled,
+  
+  name = "Z-score",
+  
+  top_annotation = ha_top20,
+  
+  cluster_rows = TRUE,
+  
+  cluster_columns = FALSE,
+  
+  column_split = group_ordered,
+  
+  show_column_names = FALSE,
+  
+  row_names_gp = gpar(fontsize = 10),
+  
+  column_title = "Top 20 Biomarkers",
+  
+  heatmap_legend_param = list(
+    title = "Expression"
+  ),
+  
+  col = colorRamp2(
+    c(-2, 0, 2),
+    c("blue", "white", "red")
+  )
+)
+
+dev.off()
+
+## limpando
+rm(
+  sample_order,
+  exprs_ordered,
+  group_ordered,
+  genes_89,
+  heatmap_89,
+  heatmap_89_scaled,
+  top20,
+  heatmap_top20,
+  heatmap_top20_scaled,
+  ha_89,
+  ha_top20
+)
+gc()
+
+
 message("===========================================================================")
 message("ANÁLISE FINALIZADA!")
 message("===========================================================================")

@@ -29,6 +29,8 @@ library(recount3) #base de dados de TCGA + GTex padronizados
 library(edgeR) #complemento aos dados do TCGA + GTex
 library(pROC) #análise ROC/AUC
 library(scales) #complemento para pontuação de biomarcadores
+library(ComplexHeatmap) #heatmap
+library(circlize) #complemento de heatmap
 
 # complementos a outros pacotes
 library(Biobase)
