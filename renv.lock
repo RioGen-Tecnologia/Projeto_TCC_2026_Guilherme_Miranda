@@ -3841,6 +3841,48 @@
       "Maintainer": "Lionel Henry <lionel@rstudio.com>",
       "Repository": "RSPM"
     },
+    "forcats": {
+      "Package": "forcats",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Title": "Tools for Working with Categorical Variables (Factors)",
+      "Authors@R": "c( person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"), comment = c(ROR = \"03wc8by49\")) )",
+      "Description": "Helpers for reordering factor levels (including moving specified levels to front, ordering by first appearance, reversing, and randomly shuffling), and tools for modifying factor levels (including collapsing rare levels into other, 'anonymising', and manually 'recoding').",
+      "License": "MIT + file LICENSE",
+      "URL": "https://forcats.tidyverse.org/, https://github.com/tidyverse/forcats",
+      "BugReports": "https://github.com/tidyverse/forcats/issues",
+      "Depends": [
+        "R (>= 4.1)"
+      ],
+      "Imports": [
+        "cli (>= 3.4.0)",
+        "glue",
+        "lifecycle",
+        "magrittr",
+        "rlang (>= 1.0.0)",
+        "tibble"
+      ],
+      "Suggests": [
+        "covr",
+        "dplyr",
+        "ggplot2",
+        "knitr",
+        "readr",
+        "rmarkdown",
+        "testthat (>= 3.0.0)",
+        "withr"
+      ],
+      "VignetteBuilder": "knitr",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "RoxygenNote": "7.3.3",
+      "NeedsCompilation": "no",
+      "Author": "Hadley Wickham [aut, cre], Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+      "Maintainer": "Hadley Wickham <hadley@posit.co>",
+      "Repository": "RSPM"
+    },
     "foreach": {
       "Package": "foreach",
       "Version": "1.5.2",
@@ -4362,6 +4404,36 @@
       "Author": "Guangchuang Yu [aut, cre] (ORCID: <https://orcid.org/0000-0002-6485-8781>)",
       "Maintainer": "Guangchuang Yu <guangchuangyu@gmail.com>",
       "Repository": "RSPM"
+    },
+    "ggradar": {
+      "Package": "ggradar",
+      "Version": "0.2",
+      "Source": "GitHub",
+      "Title": "Create radar charts using ggplot2",
+      "Authors@R": "person(given = \"Ricardo\", family = \"Bion\", role = c(\"aut\", \"cre\"), email = \"ricardo.bion@airbnb.com\")",
+      "Description": "This package exports the functionality of ggplot2 to create radar charts.",
+      "License": "GPL",
+      "Imports": [
+        "forcats",
+        "ggplot2"
+      ],
+      "Suggests": [
+        "testthat (>= 2.1.0)"
+      ],
+      "Encoding": "UTF-8",
+      "RoxygenNote": "7.1.1",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "ggradar",
+      "RemoteUsername": "ricardo-bion",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "f99517ae4df2903d3dbd4116af91b24009a5ac93",
+      "NeedsCompilation": "no",
+      "Author": "Ricardo Bion [aut, cre]",
+      "Maintainer": "Ricardo Bion <ricardo.bion@airbnb.com>",
+      "Depends": [
+        "R (>= 4.1.0)"
+      ]
     },
     "ggraph": {
       "Package": "ggraph",

@@ -31,6 +31,7 @@ library(pROC) #análise ROC/AUC
 library(scales) #complemento para pontuação de biomarcadores
 library(ComplexHeatmap) #heatmap
 library(circlize) #complemento de heatmap
+library(ggradar) #gráfico de radar
 
 # complementos a outros pacotes
 library(Biobase)

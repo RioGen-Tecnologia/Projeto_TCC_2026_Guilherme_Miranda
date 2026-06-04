@@ -1121,18 +1121,114 @@ writeLines(
 gc()
 
 
-# ============== HEATMAPS ==============
+# ============== Gráficos de resultados ==============
+# Gráficos dos resultados obtidos na análise
+
+message("===========================================================================")
+message("GERANDO GRÁFICOS DOS RESULTADOS!")
+message("===========================================================================")
+
+## heatmap de resultados
+# representação gráfica de pontuação dos genes
+
+# compilando a pontuação
+ranked_results_points <- ranked_results[,c(2,(15:21),(23:26))]
+
+# organizando os dados
+# renomeando colunas
+ranked_results_points <- ranked_results_points %>%
+  rename(
+    logFC = meta_effect_n,
+    logFC_val = val_effect_n,
+    FDR = meta_fdr_n,
+    FDR_val = val_fdr_n,
+    AUC = auc_n,
+    consistencia = significance_n,
+    ppi = ppi_n,
+    I2 = robustness_n,
+    concordancia_direcional = direction_bonus,
+    bonus_up_regulado = up_bonus
+  )
+
+# reordenando colunas
+ranked_results_points <- ranked_results_points %>%
+  select(Gene_Symbol,logFC,FDR,I2,consistencia,ppi,logFC_val,
+         FDR_val,concordancia_direcional,AUC,bonus_up_regulado,biomarker_score)
+
+# dividindo os pontos de biomarcador por 100 para ficarem na escala 0-1
+ranked_results_points$biomarker_score <- ranked_results_points$biomarker_score / 100
+
+#criando heatmap de visualização de dados
+heatmap_results <- ranked_results_points %>%
+  rename(
+    "logFC validação" = logFC_val,
+    "FDR validação" = FDR_val,
+    "I²" = I2,
+    "concordãncia" = concordancia_direcional,
+    "up regulado" = bonus_up_regulado,
+    "pontuação final" = biomarker_score
+  ) %>%
+  column_to_rownames("Gene_Symbol") %>%
+  as.matrix()
+heatmap_results <- t(heatmap_results)
+
+png(
+  file.path("figures","biomarker_score_heatmap.png"),
+  width = 4200,
+  height = 1400,
+  res = 300
+)
+Heatmap(
+  heatmap_results,
+  name = "Pontuação",
+  cluster_rows = FALSE,
+  cluster_columns = FALSE,
+  row_names_side = "left",
+  row_names_gp = gpar(fontsize = 10),
+  column_names_gp = gpar(fontsize = 9),
+  col = colorRamp2(
+    c(0, 0.5, 1),
+    c("#D73027", "#FFFFBF", "#1A9850")
+  )
+)
+dev.off()
+
+## gráfico de radar
+# mostrando os top genes num gráfico circular
+
+radar_top_5 <- ranked_results_points[(1:5),c(1,2,3,6,7,8,10)] %>%
+  rename(
+    "logFC validação" = logFC_val,
+    "FDR validação" = FDR_val,
+    "PPI" = ppi
+  )
+radar_top_10 <- ranked_results_points[(6:10),c(1,2,3,6,7,8,10)] %>%
+  rename(
+    "logFC validação" = logFC_val,
+    "FDR validação" = FDR_val,
+    "PPI" = ppi
+  )
+
+png(
+  file.path("figures","top_5_radar_chart.png"),
+  width = 2500,height = 2000,res=300)
+ggradar(radar_top_5,
+        legend.position = "bottom")
+dev.off()
+
+png(
+  file.path("figures","top_10_radar_chart.png"),
+  width = 2500,height = 2000,res=300)
+ggradar(radar_top_10,
+        legend.position = "bottom")
+dev.off()
+
+## Heatmap de expressção
 # foi feito um gráfico de heatmap para os 89 DEGs e top 20 genes candidatos a
 # biomarcador por pontuação.
 
-message("===========================================================================")
-message("GERANDO HEATMAPS!")
-message("===========================================================================")
-
 ## organizando amostras
-
 # ordenar agrupando non-tumor e tumor
-
 sample_order <- order(group_roc)
 
 # aplicar ordenação
