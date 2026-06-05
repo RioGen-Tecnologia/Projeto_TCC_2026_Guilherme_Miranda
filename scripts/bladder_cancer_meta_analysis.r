@@ -1223,7 +1223,7 @@ ggradar(radar_top_10,
         legend.position = "bottom")
 dev.off()
 
-## Heatmap de expressção
+## Heatmap de expressão
 # foi feito um gráfico de heatmap para os 89 DEGs e top 20 genes candidatos a
 # biomarcador por pontuação.
 
@@ -1282,7 +1282,7 @@ Heatmap(
   ),
   col = colorRamp2(
     c(-2, 0, 2),
-    c("#2C7BB6", "white", "#D41159")
+    c("#2C7BB6", "#F0F0F0", "#D41159")
   )
 )
 
@@ -1333,7 +1333,7 @@ Heatmap(
   ),
   col = colorRamp2(
     c(-2, 0, 2),
-    c("#2C7BB6", "white", "#D41159")))
+    c("#2C7BB6", "#F0F0F0", "#D41159")))
 
 dev.off()
 
@@ -1341,15 +1341,10 @@ dev.off()
 rm(
   sample_order,
   exprs_ordered,
-  group_ordered,
   genes_89,
   heatmap_89,
-  heatmap_89_scaled,
   top20,
-  heatmap_top20,
-  heatmap_top20_scaled,
-  ha_89,
-  ha_top20
+  heatmap_top20
 )
 gc()
 
