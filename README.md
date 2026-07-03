@@ -271,20 +271,11 @@ Foi observado que todos os 89 genes identificados na análise de descobrimento t
 
 Sobre os dados de expressão também foi realizada análise ROC para avaliação diagnóstica a qual foi estimado um valor de AUC para cada gene.
 
-A partir da análise multi-criterial já descrita, foi calculado uma pontuação de ranqueamento para cada gene como candidatos a biomarcadores mais viáveis:
+A partir da análise multi-criterial já descrita, foi calculada uma pontuação de ranqueamento normalizada em uma escala de 0 a 1 para cada gene como candidatos a biomarcadores mais viáveis:
 
-| Gene Symbol | LogFC | Adjusted p-value | I² | AUC | Biomarker Score |
-|---|---:|---:|---:|---:|---:|
-| CKS2 | 1.74 | 0.0094 | 5.02 | 0.987 | 80.11 |
-| SHMT2 | 1.19 | 0.0053 | 0.00 | 0.951 | 77.58 |
-| GJB2 | 2.46 | 0.0094 | 0.00 | 0.976 | 77.51 |
-| LSR | 1.38 | 0.0083 | 17.06 | 0.969 | 76.94 |
-| PPP4C | 1.10 | 0.0062 | 0.00 | 0.992 | 74.28 |
-| H2AX | 1.17 | 0.0096 | 0.00 | 0.990 | 73.47 |
-| TYMS | 1.72 | 0.0096 | 14.39 | 0.980 | 70.30 |
-| UBE2T | 1.42 | 0.0159 | 15.60 | 0.999 | 69.16 |
-| KRT16 | 1.42 | 0.0149 | 0.00 | 0.929 | 68.71 |
-| CKS1B | 1.16 | 0.0087 | 0.00 | 0.978 | 68.61 |
+<p align="center">
+<img src="/figures/biomarker_score_heatmap.png" width="1200">
+</p>
 
 tabela inteira de biomarcadores: [Bladder_cancer_biomarker_rank.csv](results/biomarker_results/Bladder_cancer_biomarker_rank.csv)
 
