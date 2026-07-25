@@ -43,7 +43,7 @@ for (d in dirs) {
 # Master Manifesto com anotações das amostras
 metadata_path <- list.files(
   here("metadata"),
-  pattern = "\\.csv$",
+  pattern = "samples_metadata_bladder_cancer_TCC-2026.csv",
   full.names = TRUE
 )
 
@@ -870,7 +870,7 @@ ggroc(roc_curve) +
 dev.off()
 
 # limpando
-rm(roc_results,roc_df,gene,values,roc_curve,auc_value)
+rm(roc_results,roc_df,gene,values,roc_curve)
 gc()
 
 # ============== COMPILAÇÃO DE RESULTADOS ==============
