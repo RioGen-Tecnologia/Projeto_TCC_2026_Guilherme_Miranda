@@ -150,24 +150,30 @@ contrast.matrix <- makeContrasts(
   levels = matriz_modelo_GSE37817)
 fit2 <- eBayes(contrasts.fit(fit, contrast.matrix), trend = FALSE)
 
-### extração de log2FC e Erro padrão para metafor
-logFC <- fit2$coefficients[, "Tumor_vs_NonTumor"]
-SE <- fit2$stdev.unscaled[, "Tumor_vs_NonTumor"] * fit2$sigma
+## calculo de SMD
 
-# padronizando os LogFC para serem comparáveis entre estudos
-sd_study <- sd(logFC, na.rm = TRUE)
+# contando o número de amostras usando a matriz de modelo
+n_tumor <- sum(matriz_modelo_GSE37817[, "tumor"])
+n_nontumor <- sum(matriz_modelo_GSE37817[, "non_tumor"])
 
-logFC_scaled <- logFC / sd_study
-logFC_scaled <- logFC_scaled - mean(logFC_scaled, na.rm = TRUE) #centra o logFC, removendo viés global do estudo
+# Extraindo a estatística 't' do limma
+t_stat <- fit2$t[, "Tumor_vs_NonTumor"]
 
-SE_scaled    <- SE / sd_study
-
-metafor_GSE37817 <- data.frame(
-  GSE37817_logFC = logFC,
-  GSE37817_SE = SE,
-  GSE37817_logFC_scaled = logFC_scaled,
-  GSE37817_SE_scaled = SE_scaled
+# calculando o Hedges' g (SMD) e a variância usando escalc
+es_results <- escalc(
+  measure = "SMD", 
+  ti = t_stat, 
+  n1i = rep(n_tumor, length(t_stat)), 
+  n2i = rep(n_nontumor, length(t_stat))
 )
+
+# montando informações para meta-analise
+metafor_GSE37817 <- data.frame(
+  logFC = fit2$coefficients[, "Tumor_vs_NonTumor"],
+  SMD   = es_results$yi,
+  SE    = sqrt(es_results$vi) # O Erro Padrão é a raiz da variância
+)
+rownames(metafor_GSE37817) <- rownames(fit2$coefficients)
 
 # ====== Salvar arquivo ======
 ## input metafor
@@ -180,13 +186,12 @@ out_dir <- file.path(processed_dir, id_projeto)
 if (!dir.exists(out_dir)) {
   dir.create(out_dir, recursive = TRUE)
 }
-rm(out_dir)
+
 
 # arquivo para metafor
-write.csv(
+saveRDS(
   metafor_GSE37817,
-  file = file.path(processed_dir, id_projeto, "metafor_GSE37817.csv"),
-  row.names = TRUE
+  file = file.path(out_dir, "metafor_GSE37817.rds")
 )
 
 # arquivo de matriz de expressão

@@ -16,6 +16,7 @@ library(illuminaHumanv2.db) #pacote de base de anotação
 library(illuminaHumanv4.db) #pacote de base de anotação
 library(org.Hs.eg.db) #pacote de base de anotação
 library(metafor) #pacote de meta-análise
+library(pbapply) # pacote para barra de progresso e exec
 library(ggplot2) #pacote de gráficos de expressão
 library(dplyr) #gerenciamento de dataframes
 library(tibble) #gerenciamento de dataframes

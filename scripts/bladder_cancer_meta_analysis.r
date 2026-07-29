@@ -99,34 +99,45 @@ gc()
 
 # ============== PREPARAÇÃO PARA META-ANÁLISE ==============
 # Nesta seção os dados dos diferentes projetos são integrados.
-# O input da meta-análise gerado foi os valores de Log2FC e Erro padrão para cada,
-# gene identificado em cada projeto.
-# O erro padrão das estimativas foi calculado como o produto entre o desvio padrão
-# residual moderado e um fator dependente da matriz de design:
-# SE = fit2$stdev.unscaled * fit2$sigma
-# SE = estrutura do modelo * ruído dos dados
-
-# 1. Preparar a lista convertendo rownames em uma coluna temporária
-# Isso evita que o R perca os IDs durante o merge
 
 message("===========================================================================")
 message("PREPARANDO DADOS PARA META-ANÁLISE")
 message("===========================================================================")
 
-entrez <- lapply(arquivos_metafor, function(df) {
-  df$EntrezID <- rownames(df)
-  return(df)
-})
+# extraindo os nomes de todos os genes de todos os datasets num único vetor
+todos_genes <- unlist(lapply(arquivos_metafor, rownames))
 
-# 2. Unificar todos os dataframes pelo EntrezID
-input_metafor <- Reduce(function(x, y) merge(x, y, by = "EntrezID", all = TRUE), entrez)
+# contando em quantos datasets cada gene aparece
+contagem_genes <- table(todos_genes)
 
-# 3. Transformar o EntrezID de volta em rownames e remover a coluna
-rownames(input_metafor) <- input_metafor$EntrezID
-input_metafor$EntrezID <- NULL
+# filtrando apenas os genes que aparecem em 3 ou mais datasets
+genes_filtrados <- names(contagem_genes[contagem_genes >= 3])
+message("Número de genes retidos para análise: ", length(genes_filtrados))
+
+
+# criando matrizes vazias (com NA) para alinhar os dados
+num_genes <- length(genes_filtrados)
+num_datasets <- length(arquivos_metafor)
+nomes_datasets <- names(arquivos_metafor)
+
+matriz_SMD   <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
+matriz_SE    <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
+matriz_logFC <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
+
+# preenchendo as matrizes iterando sobre os datasets
+for (i in seq_along(arquivos_metafor)) {
+  df <- arquivos_metafor[[i]]
+  # descobrir quais dos genes filtrados existem neste dataset específico
+  genes_em_comum <- intersect(genes_filtrados, rownames(df))
+  # injetar os valores nas posições corretas da matriz
+  matriz_SMD[genes_em_comum, i]   <- df[genes_em_comum, "SMD"]
+  matriz_SE[genes_em_comum, i]    <- df[genes_em_comum, "SE"]
+  matriz_logFC[genes_em_comum, i] <- df[genes_em_comum, "logFC"]
+}
+
 
 # limpando
-rm(entrez)
+rm(num_genes,num_datasets,nomes_datasets,df)
 gc()
 
 # ============== META-ANÁLISE ==============
@@ -134,112 +145,81 @@ gc()
 # o pacote metafor.
 # Foi utilizado como critério genes que aparecem em no mínimo 3 projetos simultaneamente.
 
-# confeindo rapidamente se a pasta de salvamento está pronta
-out_dir <- file.path(results_dir, "meta_analysis")
-if (!dir.exists(out_dir)) {
-  dir.create(out_dir, recursive = TRUE)
-}
-rm(out_dir)
-
-#  salvando tabela de input do metafor
-write.csv(input_metafor,
-          file = file.path(results_dir,
-                           "meta_analysis",
-                           "input_metafor_TCC_2026.csv"),
-          row.names = TRUE)
-
-
-# obtenção das colunas de efeito e erro padrão
-logFC_cols <- grep("_logFC_scaled$", colnames(input_metafor))
-SE_cols    <- grep("_SE_scaled$", colnames(input_metafor))
-
-logFC_orig_cols <- grep("_logFC$", colnames(input_metafor))
-SE_orig_cols    <- grep("_SE$", colnames(input_metafor))
-
-# Filtrar genes presentes em ≥3 estudos
-n_studies <- rowSums(!is.na(input_metafor[, logFC_cols]))
-metafor_filtered <- input_metafor[n_studies >= 3, ]
-
-# Função que roda meta-análise para um gene
-meta_gene <- function(i){
-  # dados escalados (para meta-análise)
-  yi  <- as.numeric(metafor_filtered[i, logFC_cols])
-  sei <- as.numeric(metafor_filtered[i, SE_cols])
-  keep <- !is.na(yi) & !is.na(sei)
-  # exigir pelo menos 3 estudos (mais robusto)
-  if (sum(keep) < 2) {
-    return(c(NA, NA, NA, NA, NA))
-  }
-  out <- tryCatch({
-    # meta-análise no espaço padronizado
-    fit <- rma(yi = yi[keep],
-               sei = sei[keep],
-               method = "REML",
-               test = "knha")
-    # reconstrução do logFC original
-    yi_orig  <- as.numeric(metafor_filtered[i, logFC_orig_cols])
-    sei_orig <- as.numeric(metafor_filtered[i, SE_orig_cols])
-    
-    # usar exatamente os mesmos estudos do modelo
-    yi_orig  <- yi_orig[keep]
-    sei_orig <- sei_orig[keep]
-    # evitar divisão por zero
-    sei_orig[sei_orig == 0] <- NA
-    valid <- !is.na(yi_orig) & !is.na(sei_orig)
-    if (sum(valid) < 2) {
-      logFC_meta <- NA
-    } else {
-      w <- 1 / (sei_orig[valid]^2)
-      logFC_meta <- sum(yi_orig[valid] * w) / sum(w)
-    }
-    c(logFC_meta, fit$se, fit$pval, fit$I2, fit$tau2)
-  }, error = function(e){
-    c(NA, NA, NA, NA, NA)
-  })
-  return(out)
-}
-
 message("===========================================================================")
 message("REALIZANDO META-ANÁLISE...")
 message("===========================================================================")
 
 # rodar para todos os genes
-results <- t(sapply(1:nrow(metafor_filtered), meta_gene))
-falhas <- sum(is.na(results[,1]))
-cat(paste0(falhas," (",round((falhas/nrow(metafor_filtered))*100,2),"%) genes falharam.\n"))
+resultados_meta <- pblapply(1:length(genes_filtrados), function(i) {
+  
+  yi  <- matriz_SMD[i, ]
+  sei <- matriz_SE[i, ]
+  
+  estudos_validos <- sum(!is.na(yi) & !is.na(sei))
+  
+  if (estudos_validos < 3) {
+    return(c(SMD_pool = NA, SE_pool = NA, pval = NA, I2 = NA, tau2 = NA, num_estudos = estudos_validos))
+  }
+  
+  # Usando REML (padrão mais moderno que conversamos)
+  fit <- tryCatch({
+    rma.uni(yi = yi, sei = sei, method = "REML")
+  }, error = function(e) {
+    return(NULL)
+  })
+  
+  if (is.null(fit)) {
+    return(c(SMD_pool = NA, SE_pool = NA, pval = NA, I2 = NA, tau2 = NA, num_estudos = estudos_validos))
+  }
+  
+  c(
+    SMD_pool    = as.numeric(fit$beta),
+    SE_pool     = fit$se,
+    pval        = fit$pval,
+    I2          = fit$I2,
+    tau2        = fit$tau2,
+    num_estudos = estudos_validos
+  )
+})
 
 message("===========================================================================")
 message("META-ANÁLISE FINALIZADA")
 message("===========================================================================")
 
-# transformar em dataframe
-results <- as.data.frame(results)
+## transformando em uma tabela final
+df_meta_final <- as.data.frame(do.call(rbind, resultados_meta))
+df_meta_final$Gene <- genes_filtrados
 
-colnames(results) <- c(
-  "logFC_meta",
-  "SE_meta",
-  "p_meta",
-  "I2",
-  "tau2"
-)
-results$Gene <- rownames(metafor_filtered)
+# calculando a média do logFC ignorando os NAs
+df_meta_final$logFC_mean <- rowMeans(matriz_logFC, na.rm = TRUE)
 
-# anotar em gene symbol
-gene_symbols <- mapIds(
+# Remover eventuais genes que falharam no modelo (NAs) antes de corrigir o P-valor
+df_meta_final <- df_meta_final[!is.na(df_meta_final$pval), ]
+
+# Correção FDR (Benjamini-Hochberg)
+df_meta_final$FDR <- p.adjust(df_meta_final$pval, method = "BH")
+
+# anotando os genes
+simbolos_mapeados <- mapIds(
   org.Hs.eg.db,
-  keys = results$Gene,
+  keys = as.character(df_meta_final$Gene),
   column = "SYMBOL",
   keytype = "ENTREZID",
-  multiVals = "first"
+  multiVals = "first" # Se houver mais de um símbolo, pega o primeiro
 )
-results$Symbol <- gene_symbols
 
-# remove genes NA, sem anotação
-results <- results[!is.na(results$Symbol), ]
+# criando a coluna symbol
+df_meta_final$Symbol <- simbolos_mapeados[as.character(df_meta_final$Gene)]
+
+# Reordenar colunas
+df_meta_final <- df_meta_final[, c("Gene", "Symbol", "num_estudos", "logFC_mean", "SMD_pool", "SE_pool", "pval", "FDR", "I2", "tau2")]
+df_meta_final <- df_meta_final[order(df_meta_final$pval), ]
+
+print(head(df_meta_final))
 
 # limpando
-rm(logFC_cols,SE_cols,logFC_orig_cols,SE_orig_cols,n_studies,
-   falhas,gene_symbols,meta_gene)
+rm(matriz_SMD, matriz_SE, matriz_logFC, resultados_meta, todos_genes, contagem_genes, 
+  genes_filtrados, i,estudos_validos,simbolos_mapeados)
 gc()
 
 # ============== TRATAMENTO DE DADOS E ESTIMAÇÃO DE DEGS ==============
@@ -249,13 +229,9 @@ gc()
 # Critérios: |Log2FC| > 1 & p-value(FDR) <= 0,05 
 
 
-# Aplicar FDR
-results$FDR <- p.adjust(results$p_meta, method = "BH")
-results <- results[!is.na(results$FDR), ]
-
 # filtrar DEGs finais
-DEGs <- subset(results,
-               abs(logFC_meta) > 1 & FDR < 0.05)
+DEGs <- subset(df_meta_final,
+               abs(logFC_mean) > 1 & FDR < 0.05)
 cat(paste0("Foram obtidos ",nrow(DEGs)," genes diferencialmente expressos!\n"))
 
 # filtrando por up-regulated e I²<50%
@@ -270,22 +246,23 @@ if (!dir.exists(out_dir)) {
 rm(out_dir)
 
 #todos os genes
-write.csv(
-  results,
-  file = file.path(results_dir, "DEGs_tables", "global_meta.csv"),
-  row.names = FALSE
-)
+write.csv(df_meta_final,
+          file = file.path(results_dir,"meta_analysis","resultados_meta_analise.csv"),
+          row.names = FALSE)
+
 #genes diferencialmente expressos
-write.csv(
-  DEGs,
-  file = file.path(results_dir, "DEGs_tables", "DEGs_meta.csv"),
-  row.names = FALSE
-)
+write.csv(DEGs,
+          file = file.path(results_dir,"meta_analysis","DEGs_meta_analise.csv"),
+          row.names = FALSE)
 
 
 # ============== GRÁFICOS DE EXPRESSÃO ==============
 # Aqui são gerados os gráficos de expressão como MA e volcano plot, além de histograma
 # dos valores de I² identificados dos genes totais e DEGs
+
+#renomeando objeto resultados para facilitar o pipeline
+results <- df_meta_final
+rm(df_meta_final)
 
 # Análise de heterogeneidade
 # heterogeneidade global
@@ -337,17 +314,17 @@ dev.off()
 
 results$significance <- "Not significant"
 results$significance[
-  results$FDR < 0.05 & results$logFC_meta > 1
+  results$FDR < 0.05 & results$logFC_mean > 1
 ] <- "Upregulated"
 results$significance[
-  results$FDR < 0.05 & results$logFC_meta < -1
+  results$FDR < 0.05 & results$logFC_mean < -1
 ] <- "Downregulated"
 results$log10FDR <- -log10(results$FDR)
 
 
 png(file.path(figures_dir, "meta_volcano_plot_bexiga.png"), width = 8, height = 8, units = "in", res = 300)
 
-ggplot(results, aes(x = logFC_meta, y = log10FDR, color = significance)) +
+ggplot(results, aes(x = logFC_mean, y = log10FDR, color = significance)) +
   geom_point(alpha = 0.6, size = 1.5) +
   scale_color_manual(values = c(
     "Downregulated" = "#2C7BB6",
@@ -528,7 +505,7 @@ dotplot(ereact, showCategory = 20)
 dev.off()
 
 ## cnetplots
-gene_fc <- DEGs$logFC_meta
+gene_fc <- DEGs$logFC_mean
 names(gene_fc) <- DEGs$Symbol
 
 # GO Biologiacal Process
@@ -637,7 +614,7 @@ degs_mapped <- string_db$map(DEGs, "Gene", removeUnmappedRows = TRUE)
 degs_filtered <- degs_mapped %>%
   filter(FDR < 0.05,
          I2 < 50,
-         abs(logFC_meta) > 1.0)
+         abs(logFC_mean) > 1.0)
 
 # Obtendo as interações atrarvés dos IDs
 hits <- degs_filtered$STRING_id
@@ -883,7 +860,7 @@ message("=======================================================================
 # criando dataframe dos resultados compilados
 compiled_results <- tibble("Entrez"=DEGs_filtered$Gene,
                    "Gene_Symbol"=DEGs_filtered$Symbol,
-                   "LogFC"=DEGs_filtered$logFC_meta,
+                   "SMD"=DEGs_filtered$SMD_pool,
                    "adjusted_p.value"=DEGs_filtered$FDR,
                    "I2"=DEGs_filtered$I2)
 
@@ -919,7 +896,7 @@ compiled_results <- compiled_results %>%
   left_join(
     validation_results_filtered %>%
       rownames_to_column("Entrez") %>%
-      select(Entrez, logFC_val, FDR_val),
+      select(Entrez, SMD_val, FDR_val),
     by = c("Entrez" = "Entrez")
   )
 
@@ -937,6 +914,10 @@ compiled_results <- as.data.frame(compiled_results)
 #removendo os NA de PPI
 compiled_results$PPI_degree[is.na(compiled_results$PPI_degree)] <- 0
 
+cat(paste0(sum(is.na(compiled_results$SMD_val)), " genes não foram identificados na validação.\n"))
+
+#removendo genes ausentes na validação
+compiled_results <- compiled_results[!is.na(compiled_results$SMD_val), ]
 
 # ============== PONTUAÇÃO ==============
 # fase final da análise. Baseado nas análises feitas como critérios cada gene será
@@ -983,11 +964,11 @@ score_biomarkers <- function(df) {
   df %>%
     mutate(
       
-      # CRITÉRIO 1: mangnitude biológica (logFC)
+      # CRITÉRIO 1: mangnitude biológica (SMD)
       # priorização de up-regulados com pmax(LogFC, 0)
       # Genes negativos viram 0
-      logFC_pos = pmax(LogFC, 0),
-      logFC_val_pos = pmax(logFC_val, 0),
+      SMD_pos = pmax(SMD, 0),
+      SMD_val_pos = pmax(SMD_val, 0),
       
       # CRITÉRIO 2: valor p ajustado por FDR
       # valores menores refletem melhor evidência estatística
@@ -1003,10 +984,10 @@ score_biomarkers <- function(df) {
       # Reduz outliers e converte para escala 0-1
 
       # magnitude biológica GEO
-      meta_effect_n = safe_rescale( clip_quant(logFC_pos)),
+      meta_effect_n = safe_rescale( clip_quant(SMD_pos)),
       
       # magnitude biológica TCGA
-      val_effect_n = safe_rescale(clip_quant(logFC_val_pos)),
+      val_effect_n = safe_rescale(clip_quant(SMD_val_pos)),
       
       # significância estatística GEO
       meta_fdr_n = safe_rescale(clip_quant(meta_fdr_score)),
@@ -1039,14 +1020,14 @@ score_biomarkers <- function(df) {
       # mesmo tempo
       # +1 = mesma direção
       #  0 = direção oposta
-      direction_bonus = ifelse(sign(LogFC) == sign(logFC_val),1,0),
+      direction_bonus = ifelse(sign(SMD) == sign(SMD_val),1,0),
       
       # Bônus de prioridade a genes up regulados
       # interesse clínico
       # 1 = up-regulado nas duas análises
       # 0.5 = up-regulado em apenas uma
       # 0 = não up-regulado
-      up_bonus = case_when(LogFC > 0 & logFC_val > 0 ~ 1, LogFC > 0 | logFC_val > 0 ~ 0.5,TRUE ~ 0),
+      up_bonus = case_when(SMD > 0 & SMD_val > 0 ~ 1, SMD > 0 | SMD_val > 0 ~ 0.5,TRUE ~ 0),
       
       # SCORE FINAL
       # Os pesos podem ser ajustados
@@ -1086,11 +1067,11 @@ head(
   ranked_results[, c(
     "Gene_Symbol",
     "biomarker_score",
-    "LogFC",
+    "SMD",
     "adjusted_p.value",
     "I2",
     "significance_score",
-    "logFC_val",
+    "SMD_val",
     "FDR_val",
     "auc",
     "PPI_degree"
@@ -1138,8 +1119,8 @@ ranked_results_points <- ranked_results[,c(2,(15:21),(23:26))]
 # renomeando colunas
 ranked_results_points <- ranked_results_points %>%
   rename(
-    logFC = meta_effect_n,
-    logFC_val = val_effect_n,
+    SMD = meta_effect_n,
+    SMD_val = val_effect_n,
     FDR = meta_fdr_n,
     FDR_val = val_fdr_n,
     AUC = auc_n,
@@ -1152,7 +1133,7 @@ ranked_results_points <- ranked_results_points %>%
 
 # reordenando colunas
 ranked_results_points <- ranked_results_points %>%
-  select(Gene_Symbol,logFC,FDR,I2,consistencia,ppi,logFC_val,
+  select(Gene_Symbol,SMD,FDR,I2,consistencia,ppi,SMD_val,
          FDR_val,concordancia_direcional,AUC,bonus_up_regulado,biomarker_score)
 
 # dividindo os pontos de biomarcador por 100 para ficarem na escala 0-1
@@ -1161,7 +1142,7 @@ ranked_results_points$biomarker_score <- ranked_results_points$biomarker_score /
 #criando heatmap de visualização de dados
 heatmap_results <- ranked_results_points %>%
   rename(
-    "logFC validação" = logFC_val,
+    "SMD validação" = SMD_val,
     "FDR validação" = FDR_val,
     "I²" = I2,
     "concordãncia" = concordancia_direcional,
@@ -1198,13 +1179,13 @@ dev.off()
 
 radar_top_5 <- ranked_results_points[(1:5),c(1,2,3,6,7,8,10)] %>%
   rename(
-    "logFC validação" = logFC_val,
+    "SMD validação" = SMD_val,
     "FDR validação" = FDR_val,
     "PPI" = ppi
   )
 radar_top_10 <- ranked_results_points[(6:10),c(1,2,3,6,7,8,10)] %>%
   rename(
-    "logFC validação" = logFC_val,
+    "SMD validação" = SMD_val,
     "FDR validação" = FDR_val,
     "PPI" = ppi
   )
@@ -1236,39 +1217,39 @@ exprs_ordered <- validation_exprs[, sample_order]
 group_ordered <- group_roc[sample_order]
 
 
-## HEATMAP DOS 89 GENES HOMOGÊNEOS
+## HEATMAP DOS GENES FILTRADOS HOMOGÊNEOS
 
 # genes em ENTREZ
-genes_89 <- as.character(DEGs_filtered$Gene)
+genes_filtered <- as.character(DEGs_filtered$Gene)
 
 # filtrar matriz
-heatmap_89 <- exprs_ordered[rownames(exprs_ordered) %in% genes_89,]
+heatmap_filtered <- exprs_ordered[rownames(exprs_ordered) %in% genes_filtered,]
 
 # ordenar linhas igual DEGs_filtered
-heatmap_89 <- heatmap_89[match(genes_89, rownames(heatmap_89)),]
+heatmap_filtered <- heatmap_filtered[match(genes_filtered, rownames(heatmap_filtered)),]
 
 # substituir ENTREZ por símbolo gênico
-rownames(heatmap_89) <- DEGs_filtered$Symbol
+rownames(heatmap_filtered) <- DEGs_filtered$Symbol
 
 # Z-score por gene
-heatmap_89_scaled <- t(scale(t(heatmap_89)))
+heatmap_filtered_scaled <- t(scale(t(heatmap_filtered)))
 
 # remover possíveis NAs
-heatmap_89_scaled <- heatmap_89_scaled[complete.cases(heatmap_89_scaled),]
+heatmap_filtered_scaled <- heatmap_filtered_scaled[complete.cases(heatmap_filtered_scaled),]
 
 # anotação de grupos
-ha_89 <- HeatmapAnnotation(
+ha_filtered <- HeatmapAnnotation(
   Group = group_ordered,
   col = list(Group = c("non_tumor" = "#3A7D44", "tumor" = "#7B2CBF")))
 
 # salvar figura
-png(file.path("figures","heatmap_89_genes.png"),
+png(file.path("figures","heatmap_filtered_genes.png"),
     width = 3200,height = 4200,res = 400)
 
 Heatmap(
-  heatmap_89_scaled,
+  heatmap_filtered_scaled,
   name = "Z-score",
-  top_annotation = ha_89,
+  top_annotation = ha_filtered,
   cluster_rows = TRUE,
   # NÃO clusterizar amostras
   cluster_columns = FALSE,
@@ -1341,8 +1322,8 @@ dev.off()
 rm(
   sample_order,
   exprs_ordered,
-  genes_89,
-  heatmap_89,
+  genes_filtered,
+  heatmap_filtered,
   top20,
   heatmap_top20
 )
