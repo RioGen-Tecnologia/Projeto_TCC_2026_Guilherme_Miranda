@@ -708,7 +708,7 @@ write.csv(
 
 #limpando
 rm(genes_degs,genes_background,ego_bp,ekegg,ereact,check_genes,bp_DEGs,kegg_DEGs,react_DEGs,all_pathways,
-   all_pathways_long,gene_fc)
+   all_pathways_long,gene_fc,gsea_reactome,gsea_kegg,gsea_go,geneList)
 gc()
 
 
