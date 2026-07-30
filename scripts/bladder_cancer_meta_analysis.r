@@ -348,10 +348,13 @@ dev.off()
 
 
 # ============== ENRIQUECIMENTO FUNCIONAL ==============
-# realiza enriquecimento funcional (Over-representation analysis) com genes
-# diferencialmente expressos nas bases de dados KEGG, REACTOME e GO (biological
-# process, Cell Component & Molecular function) para identificar candidatos a
-# biomarcadores é identificado os genes presentes nas vias mais relevantes
+# realiza enriquecimento funcional (Over-representation analysis) e GSEA
+# (Gene Set Enrichment Analisys) com genes diferencialmente expressos nas bases
+# de dados KEGG, REACTOME e GO (biological process, Cell Component & Molecular function)
+# para identificar candidatos a biomarcadores é identificado os genes presentes
+# nas vias mais relevantes
+
+## ==== ORA ====
 
 # lista de genes diferencialmente expressos
 genes_degs <- unique(DEGs$Gene)
@@ -359,7 +362,7 @@ genes_degs <- unique(DEGs$Gene)
 # lista de todos os genes como universo
 genes_background <- unique(results$Gene)
 
-## ==== GO ENRICHMENT ====
+## GO ENRICHMENT
 
 message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
@@ -385,7 +388,7 @@ ego_bp <- clusterProfiler::simplify(
   select_fun = min
 )
 
-## ==== KEGG ====
+## KEGG
 
 message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
@@ -402,7 +405,7 @@ ekegg <- clusterProfiler::enrichKEGG(
 # converter para símbolos
 ekegg <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
 
-## ==== REACTOME ====
+## REACTOME
 
 message("===========================================================================")
 message("REALIZANDO ENRIQUECIMENTO FUNCIONAL")
@@ -484,6 +487,66 @@ enrichment_scores <- all_pathways_long %>%
   arrange(desc(n_vias), best_padj)
 
 
+## ==== GSEA ====
+
+# extraindo e organizando os genes por um valor
+# o valor escolhido foi o SMD
+geneList <- results$SMD_pool
+names(geneList) <- as.character(results$Gene)
+geneList <- sort(geneList, decreasing = TRUE)
+
+# Remover NAs numéricos e NAs nos nomes dos genes
+keep <- !is.na(geneList) & !is.na(names(geneList)) & names(geneList) != "NA" & names(geneList) != ""
+geneList <- geneList[keep]
+
+# removendo duplicatas (caso existam)
+geneList <- geneList[!duplicated(names(geneList))]
+
+# ordenando novamente
+geneList <- sort(geneList, decreasing = TRUE)
+
+
+## GO
+
+gsea_go <- gseGO(
+  geneList      = geneList,
+  OrgDb         = org.Hs.eg.db,
+  keyType       = "ENTREZID",
+  ont           = "BP",
+  minGSSize     = 10,
+  maxGSSize     = 500,
+  pvalueCutoff  = 0.05,
+  pAdjustMethod = "BH",
+  nPermSimple   = 10000,
+  verbose       = FALSE
+)
+
+## KEGG
+
+gsea_kegg <- gseKEGG(
+  geneList      = geneList,
+  organism      = "hsa",
+  minGSSize     = 10,
+  maxGSSize     = 500,
+  pvalueCutoff  = 0.05,
+  pAdjustMethod = "BH",
+  nPermSimple   = 10000,
+  verbose       = FALSE
+)
+
+## REACTOME
+
+gsea_reactome <- gsePathway(
+  geneList      = geneList,
+  organism      = "human",
+  minGSSize     = 10,
+  maxGSSize     = 500,
+  pvalueCutoff  = 0.05,
+  pAdjustMethod = "BH",
+  verbose       = FALSE
+)
+
+
 ## ==== plots ====
 
 message("===========================================================================")
@@ -492,15 +555,15 @@ message("GERANDO GRÁFICOS DE ENRIQUECIMENTO")
 message("===========================================================================")
 
 ## dotplots
-png(file.path(figures_dir, "GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "ORA_GO_BP_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ego_bp, showCategory = 20)
 dev.off()
 
-png(file.path(figures_dir, "KEGG_dotplot.png"), width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "ORA_KEGG_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ekegg, showCategory = 20)
 dev.off()
 
-png(file.path(figures_dir, "REACTOME_dotplot.png"), width = 3000, height = 2000, res = 300)
+png(file.path(figures_dir, "ORA_REACTOME_dotplot.png"), width = 3000, height = 2000, res = 300)
 dotplot(ereact, showCategory = 20)
 dev.off()
 
@@ -509,7 +572,7 @@ gene_fc <- DEGs$logFC_mean
 names(gene_fc) <- DEGs$Symbol
 
 # GO Biologiacal Process
-png(file.path(figures_dir, "GO_BP_cnetplot.png"),width = 3500,height = 3000,res = 450)
+png(file.path(figures_dir, "ORA_GO_BP_cnetplot.png"),width = 3500,height = 3000,res = 450)
 enrichplot::cnetplot(
   ego_bp,
   showCategory = 5,
@@ -531,8 +594,31 @@ enrichplot::cnetplot(
   )
 dev.off()
 
+# KEGG
+png(file.path(figures_dir, "ORA_KEGG_BP_cnetplot.png"),width = 3500,height = 3000,res = 450)
+enrichplot::cnetplot(
+  ekegg,
+  showCategory = 5,
+  foldChange = gene_fc,
+  node_label = "all",
+  layout = "kk"
+) +
+  scale_color_gradientn(
+    colours = c("#2C7BB6", "#D41159"),
+    limits = c(-3, 3),
+    oob = scales::squish,
+    name = "logFC"
+  ) +
+  labs(size = "Gene count") +
+  
+  theme(
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  )
+dev.off()
+
 # reactome
-png(file.path(figures_dir, "REACTOME_cnetplot.png"),width = 3500,height = 3000,res = 450)
+png(file.path(figures_dir, "ORA_REACTOME_cnetplot.png"),width = 3500,height = 3000,res = 450)
 enrichplot::cnetplot(
   ereact,
   showCategory = 5,
@@ -553,6 +639,46 @@ enrichplot::cnetplot(
   )
 dev.off()
 
+## GSEA
+
+# GO
+png(filename = file.path(figures_dir, "GSEA_GO_dotplot.png"),
+    width = 1800, height = 2400, res = 300, type = "cairo")
+dotplot(gsea_go, showCategory = 20) + 
+  labs(title = "Enriquecimento Funcional (GSEA - Gene Ontology)") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12, hjust = 0, margin = margin(t = 15, b = 5)),
+    axis.text.y = element_text(size = 8),
+    axis.title.y = element_blank(),
+    panel.spacing.y = unit(1.5, "lines")
+  )
+dev.off()
+
+# KEGG
+png(filename = file.path(figures_dir, "GSEA_KEGG_dotplot.png"),
+    width = 1800,height = 2400,res = 300,type = "cairo")
+dotplot(gsea_kegg, showCategory = 20) + 
+  labs(title = "Enriquecimento Funcional (GSEA - KEGG)") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12, hjust = 0, margin = margin(t = 15, b = 5)),
+    axis.text.y = element_text(size = 8),
+    axis.title.y = element_blank(),
+    panel.spacing.y = unit(1.5, "lines")
+  )
+dev.off()
+
+# REACTOME
+png(filename = file.path(figures_dir, "GSEA_REACTOME_dotplot.png"),
+    width = 1800, height = 2400, res = 300, type = "cairo")
+dotplot(gsea_reactome, showCategory = 20) + 
+  labs(title = "Enriquecimento Funcional (GSEA - REACTOME)") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12, hjust = 0, margin = margin(t = 15, b = 5)),
+    axis.text.y = element_text(size = 8),
+    axis.title.y = element_blank(),
+    panel.spacing.y = unit(1.5, "lines")
+  )
+dev.off()
 
 ## ==== Exportando dados ====
 
@@ -1139,8 +1265,11 @@ ranked_results_points <- ranked_results_points %>%
 # dividindo os pontos de biomarcador por 100 para ficarem na escala 0-1
 ranked_results_points$biomarker_score <- ranked_results_points$biomarker_score / 100
 
+#filtrando o gráfico para melhor visualização
+ranked_results_points_filtered <- ranked_results_points[(1:100),]
+
 #criando heatmap de visualização de dados
-heatmap_results <- ranked_results_points %>%
+heatmap_results <- ranked_results_points_filtered %>%
   rename(
     "SMD validação" = SMD_val,
     "FDR validação" = FDR_val,
@@ -1174,35 +1303,6 @@ Heatmap(
 )
 dev.off()
 
-## gráfico de radar
-# mostrando os top genes num gráfico circular
-
-radar_top_5 <- ranked_results_points[(1:5),c(1,2,3,6,7,8,10)] %>%
-  rename(
-    "SMD validação" = SMD_val,
-    "FDR validação" = FDR_val,
-    "PPI" = ppi
-  )
-radar_top_10 <- ranked_results_points[(6:10),c(1,2,3,6,7,8,10)] %>%
-  rename(
-    "SMD validação" = SMD_val,
-    "FDR validação" = FDR_val,
-    "PPI" = ppi
-  )
-
-png(
-  file.path("figures","top_5_radar_chart.png"),
-  width = 2500,height = 2000,res=300)
-ggradar(radar_top_5,
-        legend.position = "bottom")
-dev.off()
-
-png(
-  file.path("figures","top_10_radar_chart.png"),
-  width = 2500,height = 2000,res=300)
-ggradar(radar_top_10,
-        legend.position = "bottom")
-dev.off()
 
 ## Heatmap de expressão
 # foi feito um gráfico de heatmap para os 89 DEGs e top 20 genes candidatos a
