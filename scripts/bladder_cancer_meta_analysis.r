@@ -213,6 +213,7 @@ df_meta_final$Symbol <- simbolos_mapeados[as.character(df_meta_final$Gene)]
 
 # Reordenar colunas
 df_meta_final <- df_meta_final[, c("Gene", "Symbol", "num_estudos", "logFC_mean", "SMD_pool", "SE_pool", "pval", "FDR", "I2", "tau2")]
+df_meta_final <- df_meta_final %>% rename(HedgesG_pool = SMD_pool) #renomeando a coluna SMD para G de Hedges
 df_meta_final <- df_meta_final[order(df_meta_final$pval), ]
 
 print(head(df_meta_final))
@@ -490,8 +491,8 @@ enrichment_scores <- all_pathways_long %>%
 ## ==== GSEA ====
 
 # extraindo e organizando os genes por um valor
-# o valor escolhido foi o SMD
-geneList <- results$SMD_pool
+# o valor escolhido foi o o g de Hedges
+geneList <- results$HedgesG_pool
 names(geneList) <- as.character(results$Gene)
 geneList <- sort(geneList, decreasing = TRUE)
 
@@ -986,8 +987,8 @@ message("=======================================================================
 # criando dataframe dos resultados compilados
 compiled_results <- tibble("Entrez"=DEGs_filtered$Gene,
                    "Gene_Symbol"=DEGs_filtered$Symbol,
-                   "SMD"=DEGs_filtered$SMD_pool,
-                   "adjusted_p.value"=DEGs_filtered$FDR,
+                   "Hedges_g"=DEGs_filtered$HedgesG_pool,
+                   "FDR"=DEGs_filtered$FDR,
                    "I2"=DEGs_filtered$I2)
 
 # adicionando rede PPI
@@ -1022,7 +1023,7 @@ compiled_results <- compiled_results %>%
   left_join(
     validation_results_filtered %>%
       rownames_to_column("Entrez") %>%
-      select(Entrez, SMD_val, FDR_val),
+      select(Entrez, HedgesG_val, FDR_val),
     by = c("Entrez" = "Entrez")
   )
 
@@ -1040,10 +1041,10 @@ compiled_results <- as.data.frame(compiled_results)
 #removendo os NA de PPI
 compiled_results$PPI_degree[is.na(compiled_results$PPI_degree)] <- 0
 
-cat(paste0(sum(is.na(compiled_results$SMD_val)), " genes não foram identificados na validação.\n"))
+cat(paste0(sum(is.na(compiled_results$HedgesG_val)), " genes não foram identificados na validação.\n"))
 
 #removendo genes ausentes na validação
-compiled_results <- compiled_results[!is.na(compiled_results$SMD_val), ]
+compiled_results <- compiled_results[!is.na(compiled_results$HedgesG_val), ]
 
 # ============== PONTUAÇÃO ==============
 # fase final da análise. Baseado nas análises feitas como critérios cada gene será
@@ -1090,11 +1091,11 @@ score_biomarkers <- function(df) {
   df %>%
     mutate(
       
-      # CRITÉRIO 1: mangnitude biológica (SMD)
+      # CRITÉRIO 1: mangnitude biológica (g de hedges)
       # priorização de up-regulados com pmax(LogFC, 0)
       # Genes negativos viram 0
-      SMD_pos = pmax(SMD, 0),
-      SMD_val_pos = pmax(SMD_val, 0),
+      Hedges_g_pos = pmax(Hedges_g, 0),
+      HedgesG_val_pos = pmax(HedgesG_val, 0),
       
       # CRITÉRIO 2: valor p ajustado por FDR
       # valores menores refletem melhor evidência estatística
@@ -1102,7 +1103,7 @@ score_biomarkers <- function(df) {
       # 0.01   -> 2
       # 0.001  -> 3
       # 1e-20  -> 20
-      meta_fdr_score = -log10(pmax(adjusted_p.value, 1e-300)),
+      meta_fdr_score = -log10(pmax(FDR, 1e-300)),
       val_fdr_score = -log10(pmax(FDR_val, 1e-300)),
       
       # NORMALIZAÇÃO DAS VARIÁVEIS
@@ -1110,10 +1111,10 @@ score_biomarkers <- function(df) {
       # Reduz outliers e converte para escala 0-1
 
       # magnitude biológica GEO
-      meta_effect_n = safe_rescale( clip_quant(SMD_pos)),
+      meta_effect_n = safe_rescale( clip_quant(Hedges_g_pos)),
       
       # magnitude biológica TCGA
-      val_effect_n = safe_rescale(clip_quant(SMD_val_pos)),
+      val_effect_n = safe_rescale(clip_quant(HedgesG_val_pos)),
       
       # significância estatística GEO
       meta_fdr_n = safe_rescale(clip_quant(meta_fdr_score)),
@@ -1146,14 +1147,14 @@ score_biomarkers <- function(df) {
       # mesmo tempo
       # +1 = mesma direção
       #  0 = direção oposta
-      direction_bonus = ifelse(sign(SMD) == sign(SMD_val),1,0),
+      direction_bonus = ifelse(sign(Hedges_g) == sign(HedgesG_val),1,0),
       
       # Bônus de prioridade a genes up regulados
       # interesse clínico
       # 1 = up-regulado nas duas análises
       # 0.5 = up-regulado em apenas uma
       # 0 = não up-regulado
-      up_bonus = case_when(SMD > 0 & SMD_val > 0 ~ 1, SMD > 0 | SMD_val > 0 ~ 0.5,TRUE ~ 0),
+      up_bonus = case_when(Hedges_g > 0 & HedgesG_val > 0 ~ 1, Hedges_g > 0 | HedgesG_val > 0 ~ 0.5,TRUE ~ 0),
       
       # SCORE FINAL
       # Os pesos podem ser ajustados
@@ -1193,11 +1194,11 @@ head(
   ranked_results[, c(
     "Gene_Symbol",
     "biomarker_score",
-    "SMD",
-    "adjusted_p.value",
+    "Hedges_g",
+    "FDR",
     "I2",
     "significance_score",
-    "SMD_val",
+    "HedgesG_val",
     "FDR_val",
     "auc",
     "PPI_degree"
@@ -1245,8 +1246,8 @@ ranked_results_points <- ranked_results[,c(2,(15:21),(23:26))]
 # renomeando colunas
 ranked_results_points <- ranked_results_points %>%
   rename(
-    SMD = meta_effect_n,
-    SMD_val = val_effect_n,
+    Hedges_G = meta_effect_n,
+    HedgesG_val = val_effect_n,
     FDR = meta_fdr_n,
     FDR_val = val_fdr_n,
     AUC = auc_n,
@@ -1259,7 +1260,7 @@ ranked_results_points <- ranked_results_points %>%
 
 # reordenando colunas
 ranked_results_points <- ranked_results_points %>%
-  select(Gene_Symbol,SMD,FDR,I2,consistencia,ppi,SMD_val,
+  select(Gene_Symbol,Hedges_G,FDR,I2,consistencia,ppi,HedgesG_val,
          FDR_val,concordancia_direcional,AUC,bonus_up_regulado,biomarker_score)
 
 # dividindo os pontos de biomarcador por 100 para ficarem na escala 0-1
@@ -1271,7 +1272,8 @@ ranked_results_points_filtered <- ranked_results_points[(1:100),]
 #criando heatmap de visualização de dados
 heatmap_results <- ranked_results_points_filtered %>%
   rename(
-    "SMD validação" = SMD_val,
+    "g de Hedges" = Hedges_G,
+    "g de Hedges validação" = HedgesG_val,
     "FDR validação" = FDR_val,
     "I²" = I2,
     "concordãncia" = concordancia_direcional,

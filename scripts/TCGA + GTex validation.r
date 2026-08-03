@@ -167,8 +167,8 @@ n_healthy <- sum(dge$samples$group == "GTEx_Healthy")
 J <- 1 - (3 / (4 * (n_tumor + n_healthy - 2) - 1))
 
 # Cálculo do SMD (Hedges' g) e Erro Padrão (SE) a partir do t-statistic do limma
-results$SMD_val    <- results$t * sqrt((1 / n_tumor) + (1 / n_healthy)) * J
-results$SE_SMD_val <- sqrt(((n_tumor + n_healthy) / (n_tumor * n_healthy)) + ((results$SMD_val^2) / (2 * (n_tumor + n_healthy))))
+results$HedgesG_val    <- results$t * sqrt((1 / n_tumor) + (1 / n_healthy)) * J
+results$SE_HedgesG_val <- sqrt(((n_tumor + n_healthy) / (n_tumor * n_healthy)) + ((results$HedgesG_val^2) / (2 * (n_tumor + n_healthy))))
 
 # Organizar e renomear colunas
 colnames(results)[colnames(results) %in% c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val", "B")] <- 
