@@ -4,26 +4,18 @@
 
 ## Visão Geral
 
-Este projeto executa uma meta-análise transcriptômica integrativa de diferentes datasets obtidos da base Gene Expression Omnibus (GEO) (GEO) do NCBI.
+Este projeto executa uma meta-análise transcriptômica integrativa de diferentes datasets obtidos da base Gene Expression Omnibus (GEO) do NCBI.
 Este pipeline inclui:
 - Meta-análise de expressão diferencial com integração de diferentes datasets.
-- Análise de enriquecimento funcional de genes diferencialmente expressos.
-- Análise de rede de interação proteína-proteína.
+- Análise de enriquecimento funcional de genes diferencialmente expressos (ORA & GSEA).
+- Análise de rede de interação proteína-proteína (PPI).
 - Validação externa por análise diferencial através da base de dados Recount3 (TCGA + GTex).
 - Avaliação de biomarcadores por ROC/AUC.
 - Priorização de biomarcadores multi-criterial.
 
 ## Objetivo biológico
 
-O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos robustos associados ao câncer de bexiga através da integração de múltiplos datasets independentes.
-
-## Limitações
-
-- Diferenças entre plataformas transcriptômicas podem introduzir viés residual
-- O estudo utiliza dados retrospectivos públicos
-- O estudo não discrimina amostras tumorais invasivas e não invasivas
-- A validação experimental ainda é necessária
-- A análise ROC/AUC foi realizada em coortes públicas
+O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos robustos associados ao câncer de bexiga como marcadores diagnósticos através da integração de múltiplos datasets independentes.
 
 ---
 
@@ -43,12 +35,12 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 | GSE52519 | GPL6884    | neqc (limma) | anotação interna |
 
 3. Integração e aplicação de meta-análise de efeitos aleatórios entre estudos
-   * A meta-análise foi escolhida como estratégia principal de integração devido à heterogeneidade entre plataformas transcriptômicas e protocolos experimentais, permitindo combinar evidências estatísticas preservando efeitos específicos de cada estudo.
+   * A meta-análise em modelo de efeitos aleatórios foi escolhida como estratégia principal de integração devido à heterogeneidade entre plataformas transcriptômicas e protocolos experimentais, permitindo combinar evidências estatísticas preservando efeitos específicos de cada estudo.
    * Estimativa combinada de:
-     * logFC
+     * g de Hedges
      * erro padrão
-     * significância estatística
-     * heterogeneidade entre estudos (I² e tau²)
+     * significância estatística (false discovery rate)
+     * heterogeneidade entre estudos (I² e tau²) (Restricted Maximum Likelihood)
 
 4. Análise de enriquecimento funcional
    - GO
@@ -85,9 +77,9 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
      * I² < 50
      
    * Critérios:
-     * Magnitude de expressão do gene (logFC)
+     * Magnitude de expressão do gene (g de Hedges)
      * Significância estatística do gene (p-value ajustado por FDR)
-     * Magnitude de expressão do gene pela análise de validação (logFC)
+     * Magnitude de expressão do gene pela análise de validação (g de Hedges)
      * Significância estatística do gene pela análise de validação (p-value ajustado por FDR)
      * AUC do gene pela análise de validação
      * Consistência de significância e presença de genes entre datasets
@@ -111,10 +103,11 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 - recount3
   
 ### Processamento e análise diferencial
-- affy
-- oligo
-- limma
-- edgeR
+- affy (leitura e normalização)
+- oligo (leitura e normalização)
+- limma (análise estatística)
+- edgeR (preparação para análise estatística voom)
+- metafor (summarized mean difference)
 
 ### Anotação
 - AnnotationDbi
@@ -126,7 +119,7 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 - illuminaHumanv4.db
 
 ### Meta-análise
-- metafor
+- metafor (meta-análise)
 
 ### Enriquecimento funcional
 - clusterProfiler
@@ -155,129 +148,14 @@ R Environment também está disponível
 
 ---
 
-## Execução e Reprodutibilidade
+## Organização do repositório
 
-### Windows
-#### Pré-requisitos
-- Certifique-se de ter o [RTools](https://cran.r-project.org/bin/windows/Rtools/) instalado no sistema (necessário para compilação de pacotes de bioinformática no Windows).
-
-Clonar repositório pelo Powershell em diretório de preferência:
-
-```powershell
-# suporte de caminhos longos
-git config --global core.longpaths true
-
-git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Miranda.git
-cd Projeto_TCC_2026_Guilherme_Miranda
-```
-
-Executar R:
-```powershell
-# substitua "R-4.6.0" pela sua versão atual do R
-& "C:\Program Files\R\R-4.6.0\bin\x64\R.exe"
-```
-
-Intalar dependências:
-
-```r
-renv::restore()
-```
-
-Executar programa:
-
-```r
-source("scripts/bladder_cancer_meta_analysis.r")
-```
-
----
-
-### Linux
-
-Clonar repositório em diretório de preferência:
-
-```bash
-git clone https://github.com/RioGen-Tecnologia/Projeto_TCC_2026_Guilherme_Miranda.git
-cd Projeto_TCC_2026_Guilherme_Miranda
-```
-
-Iniciar R
-
-```bash
-R
-```
-
-Instalar dependências:
-
-```r
-renv::restore()
-```
-
-Executar programa:
-
-```r
-source("scripts/bladder_cancer_meta_analysis.r")
-```
 
 ---
 
 ## Resultados principais
 
-Cada dataset foi analisado por expressão diferencial individualmente e os genes identificados foram integrados por meta-análise de efeitos aleatórios, resultando em um universo integrado de 20.145 genes analisados.
 
-Análises de expressão demonstraram um grande número de genes não significativos em proporção com genes significativos, o que era de se esperar visto o grande número de genes analisados.
-
-<p align="center">
-<img src="/figures/meta_volcano_plot_bexiga.png" width="550">
-</p>
-
-Foram identificados 341 genes diferencialmente expressos, dentro desse grupo 89 apresentaram baixa heterogeneidade entre estudos (I² < 50%), sendo considerados candidatos mais robustos.
-
-Os 341 genes foram enriquecidos nas bases de dados GO, KEGG e REACTOME. A análise KEGG identificou apenas duas vias significativamente enriquecidas, motivo pelo qual os resultados não foram incluídos nas figuras principais.
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="figures/GO_BP_dotplot.png" width="600"><br>
-      <em>GO Biological Process Dotplot</em>
-    </td>
-    <td align="center">
-      <img src="figures/REACTOME_dotplot.png" width="600"><br>
-      <em>REACTOME Dotplot</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="figures/GO_BP_cnetplot.png" width="600"><br>
-      <em>GO Biological Process Cnetplot</em>
-    </td>
-    <td align="center">
-      <img src="figures/REACTOME_cnetplot.png" width="600"><br>
-      <em>REACTOME Cnetplot</em>
-    </td>
-  </tr>
-</table>
-
-O grupo de 89 genes foi utilizado nas subsequentes análises multi-criteriais para identificação de candidatos a biomarcadores.
-
-Foi empregada a plataforma STRING para estimar o grau de interações a nível de proteína pelos genes como critério de seleção de biomarcadores.
-
-<p align="center">
-<img src="/figures/ppi_DEGs_TCC_2026.png" width="800">
-</p>
-
-Foi realizado uma análise de validação através da plataforma Recount3 de amostras padronizadas por monorail, comparando as expressões de amostras tumorais da base de dados TCGA e amostras não-tumorais da base de dados GTEx.
-
-Foi observado que todos os 89 genes identificados na análise de descobrimento também foram identificados na análise de validação pelo Recount3 e concordavam em direção de expressão.
-
-Sobre os dados de expressão também foi realizada análise ROC para avaliação diagnóstica a qual foi estimado um valor de AUC para cada gene.
-
-A partir da análise multi-criterial já descrita, foi calculada uma pontuação de ranqueamento normalizada em uma escala de 0 a 1 para cada gene como candidatos a biomarcadores mais viáveis:
-
-<p align="center">
-<img src="/figures/biomarker_score_heatmap.png" width="1200">
-</p>
-
-tabela inteira de biomarcadores: [Bladder_cancer_biomarker_rank.csv](results/biomarker_results/Bladder_cancer_biomarker_rank.csv)
 
 ## Agradecimentos
 
