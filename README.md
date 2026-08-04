@@ -19,6 +19,19 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 
 ---
 
+## Organização
+
+| Pasta | Descrição |
+|--------|-----------|
+| `scripts/` | Scripts em R utilizados nas diferentes etapas da análise. |
+| `data/processed/` | Matrizes de expressão e demais dados processados utilizados na meta-análise. |
+| `results/` | Resultados gerados pelo pipeline, incluindo DEGs, meta-análise, enriquecimento funcional, PPI, validação TCGA/GTEx, curvas ROC e ranking final de biomarcadores. |
+| `figures/` | Figuras produzidas durante as análises. |
+| `metadata/` | Metadados e anotações das amostras utilizadas no estudo. |
+| `renv/` | Arquivos de gerenciamento das dependências do projeto para reprodutibilidade. |
+
+---
+
 ## Pipeline de análise
 
 1. Coleta de datasets GEO.
@@ -121,7 +134,7 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 ### Meta-análise
 - metafor (meta-análise)
 
-### Enriquecimento funcional
+### Enriquecimento funcional (ORA e GSEA)
 - clusterProfiler
 - ReactomePA
 - enrichplot
@@ -136,8 +149,6 @@ O objetivo deste projeto é identificar biomarcadores transcriptômicos gênicos
 ### Manipulação e visualização de dados
 - tidyverse (dplyr, tidyr, tibble, ggplot2)
 
-## Reprodutibilidade
-
 Informação de versões completas de pacotes e sessão está disponível através de: 
 
 ```r
@@ -147,15 +158,6 @@ sessionInfo()
 R Environment também está disponível
 
 ---
-
-## Organização do repositório
-
-
----
-
-## Resultados principais
-
-
 
 ## Agradecimentos
 
