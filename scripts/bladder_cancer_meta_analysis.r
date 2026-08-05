@@ -960,8 +960,8 @@ score_biomarkers <- function(df) {
       # Os pesos podem ser ajustados
       biomarker_score =
         100 * (
-          # magnitude GEO
-          0.14 * meta_effect_n +
+            # magnitude GEO
+            0.14 * meta_effect_n +
             # magnitude TCGA
             0.14 * val_effect_n +
             # significância GEO
@@ -971,7 +971,7 @@ score_biomarkers <- function(df) {
             # consistência entre datasets
             0.12 * significance_n +
             # AUC diagnóstica
-            0.18 * auc_n +
+            0.20 * auc_n +
             # baixa heterogeneidade
             0.10 * robustness_n +
             # contexto biológico PPI
