@@ -955,12 +955,6 @@ score_biomarkers <- function(df) {
       #  0 = direção oposta
       direction_bonus = ifelse(sign(Hedges_g) == sign(HedgesG_val),1,0),
       
-      # Bônus de prioridade a genes up regulados
-      # interesse clínico
-      # 1 = up-regulado nas duas análises
-      # 0.5 = up-regulado em apenas uma
-      # 0 = não up-regulado
-      up_bonus = case_when(Hedges_g > 0 & HedgesG_val > 0 ~ 1, Hedges_g > 0 | HedgesG_val > 0 ~ 0.5,TRUE ~ 0),
       
       # SCORE FINAL
       # Os pesos podem ser ajustados
@@ -983,9 +977,7 @@ score_biomarkers <- function(df) {
             # contexto biológico PPI
             0.03 * ppi_n +
             # concordância GEO ↔ TCGA
-            0.03 * direction_bonus +
-            # bônus translacional
-            0.02 * up_bonus
+            0.03 * direction_bonus
           
         )) %>%
     
@@ -1018,7 +1010,20 @@ if (!dir.exists(out_dir)) {
 }
 rm(out_dir)
 
-ranked_results_clean <- ranked_results[,c((1:10),26)]
+ranked_results_clean <- ranked_results %>%
+  select(
+    Gene_Symbol,
+    meta_effect_n,
+    val_effect_n,
+    meta_fdr_n,
+    val_fdr_n,
+    auc_n,
+    significance_n,
+    ppi_n,
+    robustness_n,
+    direction_bonus,
+    biomarker_score
+  )
 
 message("=======================================")
 message("EXPORTANDO RESULTADOS DE BIOMARCADOERES")
@@ -1046,7 +1051,20 @@ message("=======================================================================
 # representação gráfica de pontuação dos genes
 
 # compilando a pontuação
-ranked_results_points <- ranked_results[,c(2,(15:21),(23:26))]
+ranked_results_points <- ranked_results %>%
+  select(
+    Gene_Symbol,
+    meta_effect_n,
+    val_effect_n,
+    meta_fdr_n,
+    val_fdr_n,
+    auc_n,
+    significance_n,
+    ppi_n,
+    robustness_n,
+    direction_bonus,
+    biomarker_score
+  )
 
 # organizando os dados
 # renomeando colunas
@@ -1060,14 +1078,13 @@ ranked_results_points <- ranked_results_points %>%
     consistencia = significance_n,
     ppi = ppi_n,
     I2 = robustness_n,
-    concordancia_direcional = direction_bonus,
-    bonus_up_regulado = up_bonus
+    concordancia_direcional = direction_bonus
   )
 
 # reordenando colunas
 ranked_results_points <- ranked_results_points %>%
   select(Gene_Symbol,Hedges_G,FDR,I2,consistencia,ppi,HedgesG_val,
-         FDR_val,concordancia_direcional,AUC,bonus_up_regulado,biomarker_score)
+         FDR_val,concordancia_direcional,AUC,biomarker_score)
 
 # dividindo os pontos de biomarcador por 100 para ficarem na escala 0-1
 ranked_results_points$biomarker_score <- ranked_results_points$biomarker_score / 100
@@ -1083,7 +1100,6 @@ heatmap_results <- ranked_results_points_filtered %>%
     "FDR validação" = FDR_val,
     "I²" = I2,
     "concordãncia" = concordancia_direcional,
-    "up regulado" = bonus_up_regulado,
     "pontuação final" = biomarker_score
   ) %>%
   column_to_rownames("Gene_Symbol") %>%
