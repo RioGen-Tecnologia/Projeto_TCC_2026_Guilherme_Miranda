@@ -1013,6 +1013,7 @@ rm(out_dir)
 ranked_results_clean <- ranked_results %>%
   select(
     Gene_Symbol,
+    Entrez,
     meta_effect_n,
     val_effect_n,
     meta_fdr_n,
