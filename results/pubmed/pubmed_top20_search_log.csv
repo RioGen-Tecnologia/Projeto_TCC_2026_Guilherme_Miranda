@@ -1,0 +1,353 @@
+Rank,Gene_Symbol,Entrez,Biomarker_Score,Search_Term,Search_Type,Category,Query,Articles_Found
+1,TUBA1C,84790,91.746735760166,TUBA1C,general,,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+1,TUBA1C,84790,91.746735760166,OZEMA24,general,,"""OZEMA24""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,TUBA6,general,,"""TUBA6""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,bcm948,general,,"""bcm948""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,tubulin alpha-1C chain,general,,"""tubulin alpha-1C chain""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,alpha-tubulin 6,general,,"""alpha-tubulin 6""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,tubulin alpha-6 chain,general,,"""tubulin alpha-6 chain""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,"tubulin, alpha 6",general,,"""tubulin, alpha 6""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,biomarker,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",1
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,diagnostic,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,roc_auc,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",1
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,urine,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",1
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,prognostic,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",2
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,validation,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+1,TUBA1C,84790,91.746735760166,TUBA1C,category,expression,"""TUBA1C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",2
+2,DTL,51514,87.3158055428041,DTL,general,,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",3
+2,DTL,51514,87.3158055428041,CDT2,general,,"""CDT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,DCAF2,general,,"""DCAF2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,L2DTL,general,,"""L2DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,RAMP,general,,"""RAMP""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+2,DTL,51514,87.3158055428041,denticleless protein homolog,general,,"""denticleless protein homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,DDB1- and CUL4-associated factor 2,general,,"""DDB1- and CUL4-associated factor 2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,RA-regulated nuclear matrix-associated protein,general,,"""RA-regulated nuclear matrix-associated protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,denticleless E3 ubiquitin protein ligase homolog,general,,"""denticleless E3 ubiquitin protein ligase homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+2,DTL,51514,87.3158055428041,lethal(2) denticleless protein homolog,general,,"""lethal(2) denticleless protein homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,retinoic acid-regulated nuclear matrix-associated protein,general,,"""retinoic acid-regulated nuclear matrix-associated protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+2,DTL,51514,87.3158055428041,DTL,category,biomarker,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",2
+2,DTL,51514,87.3158055428041,DTL,category,diagnostic,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+2,DTL,51514,87.3158055428041,DTL,category,roc_auc,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",1
+2,DTL,51514,87.3158055428041,DTL,category,urine,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",2
+2,DTL,51514,87.3158055428041,DTL,category,prognostic,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",3
+2,DTL,51514,87.3158055428041,DTL,category,validation,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",1
+2,DTL,51514,87.3158055428041,DTL,category,expression,"""DTL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",3
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,general,,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PHI-1,general,,"""PHI-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PLCB3N,general,,"""PLCB3N""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PNG,general,,"""PNG""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+3,PPP1R14B,26472,86.7150776212118,SOM172,general,,"""SOM172""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,protein phosphatase 1 regulatory subunit 14B,general,,"""protein phosphatase 1 regulatory subunit 14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,phospholipase C beta-3 neighboring gene protein,general,,"""phospholipase C beta-3 neighboring gene protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,phospholipase C-beta-3 neighbouring gene protein,general,,"""phospholipase C-beta-3 neighbouring gene protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,biomarker,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,diagnostic,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,roc_auc,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,urine,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,prognostic,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,validation,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+3,PPP1R14B,26472,86.7150776212118,PPP1R14B,category,expression,"""PPP1R14B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,CENPF,general,,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",8
+4,CENPF,1063,86.3383307276101,CENF,general,,"""CENF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,CILD31,general,,"""CILD31""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,PRO1779,general,,"""PRO1779""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,STROMS,general,,"""STROMS""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,hcp-1,general,,"""hcp-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,centromere protein F,general,,"""centromere protein F""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+4,CENPF,1063,86.3383307276101,AH antigen,general,,"""AH antigen""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,CENP-F kinetochore protein,general,,"""CENP-F kinetochore protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,cell-cycle-dependent 350K nuclear protein,general,,"""cell-cycle-dependent 350K nuclear protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,"centromere protein F, 350/400kDa",general,,"""centromere protein F, 350/400kDa""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,kinetochore protein CENPF,general,,"""kinetochore protein CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,mitosin,general,,"""mitosin""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+4,CENPF,1063,86.3383307276101,CENPF,category,biomarker,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",3
+4,CENPF,1063,86.3383307276101,CENPF,category,diagnostic,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",4
+4,CENPF,1063,86.3383307276101,CENPF,category,roc_auc,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",1
+4,CENPF,1063,86.3383307276101,CENPF,category,urine,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",4
+4,CENPF,1063,86.3383307276101,CENPF,category,prognostic,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",5
+4,CENPF,1063,86.3383307276101,CENPF,category,validation,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",1
+4,CENPF,1063,86.3383307276101,CENPF,category,expression,"""CENPF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",7
+5,H2AX,3014,85.9746883662589,H2AX,general,,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",34
+5,H2AX,3014,85.9746883662589,H2A.X,general,,"""H2A.X""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",7
+5,H2AX,3014,85.9746883662589,H2A/X,general,,"""H2A/X""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",7
+5,H2AX,3014,85.9746883662589,H2AFX,general,,"""H2AFX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+5,H2AX,3014,85.9746883662589,histone H2AX,general,,"""histone H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",5
+5,H2AX,3014,85.9746883662589,H2A histone family member X,general,,"""H2A histone family member X""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+5,H2AX,3014,85.9746883662589,H2AX histone,general,,"""H2AX histone""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+5,H2AX,3014,85.9746883662589,histone H2A.x,general,,"""histone H2A.x""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",3
+5,H2AX,3014,85.9746883662589,H2AX,category,biomarker,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",5
+5,H2AX,3014,85.9746883662589,H2AX,category,diagnostic,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+5,H2AX,3014,85.9746883662589,H2AX,category,roc_auc,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+5,H2AX,3014,85.9746883662589,H2AX,category,urine,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",24
+5,H2AX,3014,85.9746883662589,H2AX,category,prognostic,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",14
+5,H2AX,3014,85.9746883662589,H2AX,category,validation,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",1
+5,H2AX,3014,85.9746883662589,H2AX,category,expression,"""H2AX""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",15
+6,TACC3,10460,85.4353624514044,TACC3,general,,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",39
+6,TACC3,10460,85.4353624514044,ERIC-1,general,,"""ERIC-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+6,TACC3,10460,85.4353624514044,ERIC1,general,,"""ERIC1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+6,TACC3,10460,85.4353624514044,Tacc4,general,,"""Tacc4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+6,TACC3,10460,85.4353624514044,maskin,general,,"""maskin""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+6,TACC3,10460,85.4353624514044,transforming acidic coiled-coil-containing protein 3,general,,"""transforming acidic coiled-coil-containing protein 3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",7
+6,TACC3,10460,85.4353624514044,TACC3,category,biomarker,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",4
+6,TACC3,10460,85.4353624514044,TACC3,category,diagnostic,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",2
+6,TACC3,10460,85.4353624514044,TACC3,category,roc_auc,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+6,TACC3,10460,85.4353624514044,TACC3,category,urine,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",28
+6,TACC3,10460,85.4353624514044,TACC3,category,prognostic,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",8
+6,TACC3,10460,85.4353624514044,TACC3,category,validation,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",5
+6,TACC3,10460,85.4353624514044,TACC3,category,expression,"""TACC3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",18
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,general,,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,AGS4,general,,"""AGS4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEHI,general,,"""RNASEHI""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNHIA,general,,"""RNHIA""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNHL,general,,"""RNHL""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,ribonuclease H2 subunit A,general,,"""ribonuclease H2 subunit A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNase H(35),general,,"""RNase H(35)""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNase H2 subunit A,general,,"""RNase H2 subunit A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNase HI large subunit,general,,"""RNase HI large subunit""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,aicardi-Goutieres syndrome 4 protein,general,,"""aicardi-Goutieres syndrome 4 protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,"ribonuclease H2, large subunit",general,,"""ribonuclease H2, large subunit""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,ribonuclease HI large subunit,general,,"""ribonuclease HI large subunit""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,ribonuclease HI subunit A,general,,"""ribonuclease HI subunit A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,biomarker,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,diagnostic,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,roc_auc,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,urine,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,prognostic,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,validation,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+7,RNASEH2A,10535,84.6594442465464,RNASEH2A,category,expression,"""RNASEH2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,general,,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,BVVLS2,general,,"""BVVLS2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,D15Ertd747e,general,,"""D15Ertd747e""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,GPCR41,general,,"""GPCR41""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,GPR172A,general,,"""GPR172A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,HuPAR-1,general,,"""HuPAR-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,PAR1,general,,"""PAR1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,RFT3,general,,"""RFT3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,RFVT2,general,,"""RFVT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,hRFT3,general,,"""hRFT3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,"solute carrier family 52, riboflavin transporter, member 2",general,,"""solute carrier family 52, riboflavin transporter, member 2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,G protein-coupled receptor 172A,general,,"""G protein-coupled receptor 172A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,G-protein coupled receptor 41,general,,"""G-protein coupled receptor 41""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,PERV-A receptor 1,general,,"""PERV-A receptor 1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,human porcine endogenous retrovirus subgroup A receptor 1,general,,"""human porcine endogenous retrovirus subgroup A receptor 1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,porcine endogenous retrovirus A receptor 1,general,,"""porcine endogenous retrovirus A receptor 1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,putative G-protein coupled receptor GPCR41,general,,"""putative G-protein coupled receptor GPCR41""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,riboflavin transporter 3,general,,"""riboflavin transporter 3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,"solute carrier family 52 (riboflavin transporter), member 2",general,,"""solute carrier family 52 (riboflavin transporter), member 2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,biomarker,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,diagnostic,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,roc_auc,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,urine,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,prognostic,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,validation,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+8,SLC52A2,79581,84.2780198477369,SLC52A2,category,expression,"""SLC52A2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,SHMT2,general,,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",8
+9,SHMT2,6472,83.4612098069808,GLYA,general,,"""GLYA""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,HEL-S-51e,general,,"""HEL-S-51e""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,NEDCASB,general,,"""NEDCASB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,SHMT,general,,"""SHMT""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+9,SHMT2,6472,83.4612098069808,mSHMT,general,,"""mSHMT""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,"serine hydroxymethyltransferase, mitochondrial",general,,"""serine hydroxymethyltransferase, mitochondrial""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,GLY A+,general,,"""GLY A+""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+9,SHMT2,6472,83.4612098069808,epididymis secretory sperm binding protein Li 51e,general,,"""epididymis secretory sperm binding protein Li 51e""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,"glycine auxotroph A, human complement for hamster",general,,"""glycine auxotroph A, human complement for hamster""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,glycine hydroxymethyltransferase,general,,"""glycine hydroxymethyltransferase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,mitochondrial serine hydroxymethyltransferase,general,,"""mitochondrial serine hydroxymethyltransferase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+9,SHMT2,6472,83.4612098069808,serine aldolase,general,,"""serine aldolase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,serine hydroxymethylase,general,,"""serine hydroxymethylase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,serine hydroxymethyltransferase 2 (mitochondrial),general,,"""serine hydroxymethyltransferase 2 (mitochondrial)""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,serine methylase,general,,"""serine methylase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,threonine aldolase,general,,"""threonine aldolase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+9,SHMT2,6472,83.4612098069808,SHMT2,category,biomarker,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",2
+9,SHMT2,6472,83.4612098069808,SHMT2,category,diagnostic,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",2
+9,SHMT2,6472,83.4612098069808,SHMT2,category,roc_auc,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",1
+9,SHMT2,6472,83.4612098069808,SHMT2,category,urine,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",7
+9,SHMT2,6472,83.4612098069808,SHMT2,category,prognostic,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",6
+9,SHMT2,6472,83.4612098069808,SHMT2,category,validation,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",1
+9,SHMT2,6472,83.4612098069808,SHMT2,category,expression,"""SHMT2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",7
+10,SMC4,10051,83.0384480931813,SMC4,general,,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+10,SMC4,10051,83.0384480931813,CAP-C,general,,"""CAP-C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,CAPC,general,,"""CAPC""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC-4,general,,"""SMC-4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4L1,general,,"""SMC4L1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,structural maintenance of chromosomes protein 4,general,,"""structural maintenance of chromosomes protein 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC protein 4,general,,"""SMC protein 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4 structural maintenance of chromosomes 4-like 1,general,,"""SMC4 structural maintenance of chromosomes 4-like 1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,chromosome-associated polypeptide C,general,,"""chromosome-associated polypeptide C""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,biomarker,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,diagnostic,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,roc_auc,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,urine,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",1
+10,SMC4,10051,83.0384480931813,SMC4,category,prognostic,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,validation,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+10,SMC4,10051,83.0384480931813,SMC4,category,expression,"""SMC4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",1
+11,CKAP2L,150468,82.7606415348363,CKAP2L,general,,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+11,CKAP2L,150468,82.7606415348363,cytoskeleton-associated protein 2-like,general,,"""cytoskeleton-associated protein 2-like""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,cytoskeleton associated protein 2 like,general,,"""cytoskeleton associated protein 2 like""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,radial fiber and mitotic spindle protein,general,,"""radial fiber and mitotic spindle protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,radmis,general,,"""radmis""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,biomarker,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",1
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,diagnostic,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,roc_auc,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,urine,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",2
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,prognostic,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,validation,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+11,CKAP2L,150468,82.7606415348363,CKAP2L,category,expression,"""CKAP2L""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",2
+12,SOX4,6659,82.6800484954034,SOX4,general,,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",17
+12,SOX4,6659,82.6800484954034,CSS10,general,,"""CSS10""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,EVI16,general,,"""EVI16""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,IDDSDF,general,,"""IDDSDF""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,transcription factor SOX-4,general,,"""transcription factor SOX-4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,SRY (sex determining region Y)-box 4,general,,"""SRY (sex determining region Y)-box 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,SRY-box 4,general,,"""SRY-box 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,SRY-related HMG-box gene 4,general,,"""SRY-related HMG-box gene 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,ecotropic viral integration site 16,general,,"""ecotropic viral integration site 16""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,SOX4,category,biomarker,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",10
+12,SOX4,6659,82.6800484954034,SOX4,category,diagnostic,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",3
+12,SOX4,6659,82.6800484954034,SOX4,category,roc_auc,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+12,SOX4,6659,82.6800484954034,SOX4,category,urine,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",14
+12,SOX4,6659,82.6800484954034,SOX4,category,prognostic,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",9
+12,SOX4,6659,82.6800484954034,SOX4,category,validation,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",3
+12,SOX4,6659,82.6800484954034,SOX4,category,expression,"""SOX4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",15
+13,HMGB3,3149,82.440781823762,HMGB3,general,,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",4
+13,HMGB3,3149,82.440781823762,HMG-2a,general,,"""HMG-2a""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMG-4,general,,"""HMG-4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMG2A,general,,"""HMG2A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMG4,general,,"""HMG4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,high mobility group protein B3,general,,"""high mobility group protein B3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+13,HMGB3,3149,82.440781823762,high mobility group protein 2a,general,,"""high mobility group protein 2a""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,high-mobility group (nonhistone chromosomal) protein 4,general,,"""high-mobility group (nonhistone chromosomal) protein 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMGB3,category,biomarker,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",1
+13,HMGB3,3149,82.440781823762,HMGB3,category,diagnostic,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMGB3,category,roc_auc,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMGB3,category,urine,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",3
+13,HMGB3,3149,82.440781823762,HMGB3,category,prognostic,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",2
+13,HMGB3,3149,82.440781823762,HMGB3,category,validation,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+13,HMGB3,3149,82.440781823762,HMGB3,category,expression,"""HMGB3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",4
+14,MELK,9833,82.1841679376917,MELK,general,,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",6
+14,MELK,9833,82.1841679376917,HPK38,general,,"""HPK38""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,maternal embryonic leucine zipper kinase,general,,"""maternal embryonic leucine zipper kinase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,pEg3 kinase,general,,"""pEg3 kinase""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,protein kinase Eg3,general,,"""protein kinase Eg3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,protein kinase PK38,general,,"""protein kinase PK38""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,tyrosine-protein kinase MELK,general,,"""tyrosine-protein kinase MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,MELK,category,biomarker,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",4
+14,MELK,9833,82.1841679376917,MELK,category,diagnostic,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+14,MELK,9833,82.1841679376917,MELK,category,roc_auc,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",1
+14,MELK,9833,82.1841679376917,MELK,category,urine,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",4
+14,MELK,9833,82.1841679376917,MELK,category,prognostic,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",5
+14,MELK,9833,82.1841679376917,MELK,category,validation,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+14,MELK,9833,82.1841679376917,MELK,category,expression,"""MELK""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",5
+15,PDIA4,9601,81.5177654764624,PDIA4,general,,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+15,PDIA4,9601,81.5177654764624,ERP70,general,,"""ERP70""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,ERP72,general,,"""ERP72""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,ERp-72,general,,"""ERp-72""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,protein disulfide-isomerase A4,general,,"""protein disulfide-isomerase A4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,ER protein 70,general,,"""ER protein 70""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,ER protein 72,general,,"""ER protein 72""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,endoplasmic reticulum resident protein 70,general,,"""endoplasmic reticulum resident protein 70""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,endoplasmic reticulum resident protein 72,general,,"""endoplasmic reticulum resident protein 72""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,"protein disulfide isomerase related protein (calcium-binding protein, intestinal-related)",general,,"""protein disulfide isomerase related protein (calcium-binding protein, intestinal-related)""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,protein disulfide isomerase-associated 4,general,,"""protein disulfide isomerase-associated 4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,testicular tissue protein Li 137,general,,"""testicular tissue protein Li 137""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,biomarker,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,diagnostic,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,roc_auc,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,urine,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",1
+15,PDIA4,9601,81.5177654764624,PDIA4,category,prognostic,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,validation,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+15,PDIA4,9601,81.5177654764624,PDIA4,category,expression,"""PDIA4""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",1
+16,SKA3,221150,79.2300281366341,SKA3,general,,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+16,SKA3,221150,79.2300281366341,C13orf3,general,,"""C13orf3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+16,SKA3,221150,79.2300281366341,RAMA1,general,,"""RAMA1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+16,SKA3,221150,79.2300281366341,spindle and kinetochore-associated protein 3,general,,"""spindle and kinetochore-associated protein 3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+16,SKA3,221150,79.2300281366341,SKA3,category,biomarker,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",2
+16,SKA3,221150,79.2300281366341,SKA3,category,diagnostic,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+16,SKA3,221150,79.2300281366341,SKA3,category,roc_auc,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+16,SKA3,221150,79.2300281366341,SKA3,category,urine,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",1
+16,SKA3,221150,79.2300281366341,SKA3,category,prognostic,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",2
+16,SKA3,221150,79.2300281366341,SKA3,category,validation,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",0
+16,SKA3,221150,79.2300281366341,SKA3,category,expression,"""SKA3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",2
+17,KRT18,3875,77.976552155164,KRT18,general,,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",4
+17,KRT18,3875,77.976552155164,CK-18,general,,"""CK-18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+17,KRT18,3875,77.976552155164,CYK18,general,,"""CYK18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+17,KRT18,3875,77.976552155164,K18,general,,"""K18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+17,KRT18,3875,77.976552155164,"keratin, type I cytoskeletal 18",general,,"""keratin, type I cytoskeletal 18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+17,KRT18,3875,77.976552155164,cell proliferation-inducing gene 46 protein,general,,"""cell proliferation-inducing gene 46 protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+17,KRT18,3875,77.976552155164,cytokeratin 18,general,,"""cytokeratin 18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",17
+17,KRT18,3875,77.976552155164,"keratin 18, type I",general,,"""keratin 18, type I""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+17,KRT18,3875,77.976552155164,KRT18,category,biomarker,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",2
+17,KRT18,3875,77.976552155164,KRT18,category,diagnostic,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",1
+17,KRT18,3875,77.976552155164,KRT18,category,roc_auc,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+17,KRT18,3875,77.976552155164,KRT18,category,urine,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",2
+17,KRT18,3875,77.976552155164,KRT18,category,prognostic,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",3
+17,KRT18,3875,77.976552155164,KRT18,category,validation,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",3
+17,KRT18,3875,77.976552155164,KRT18,category,expression,"""KRT18""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",4
+18,LSR,51599,77.9246798436616,LSR,general,,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+18,LSR,51599,77.9246798436616,ILDR3,general,,"""ILDR3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,LISCH7,general,,"""LISCH7""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,lipolysis-stimulated lipoprotein receptor,general,,"""lipolysis-stimulated lipoprotein receptor""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+18,LSR,51599,77.9246798436616,LISCH protein,general,,"""LISCH protein""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,angulin-1,general,,"""angulin-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,immunoglobulin-like domain containing receptor 3,general,,"""immunoglobulin-like domain containing receptor 3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,lipolysis-stimulated remnant,general,,"""lipolysis-stimulated remnant""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,liver-specific bHLH-Zip transcription factor,general,,"""liver-specific bHLH-Zip transcription factor""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,LSR,category,biomarker,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",1
+18,LSR,51599,77.9246798436616,LSR,category,diagnostic,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",2
+18,LSR,51599,77.9246798436616,LSR,category,roc_auc,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",0
+18,LSR,51599,77.9246798436616,LSR,category,urine,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",1
+18,LSR,51599,77.9246798436616,LSR,category,prognostic,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",1
+18,LSR,51599,77.9246798436616,LSR,category,validation,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",1
+18,LSR,51599,77.9246798436616,LSR,category,expression,"""LSR""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",2
+19,CDC20,991,77.6666395203607,CDC20,general,,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",34
+19,CDC20,991,77.6666395203607,CDC20A,general,,"""CDC20A""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,OOMD14,general,,"""OOMD14""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,OZEMA14,general,,"""OZEMA14""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,bA276H19.3,general,,"""bA276H19.3""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,p55CDC,general,,"""p55CDC""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,cell division cycle protein 20 homolog,general,,"""cell division cycle protein 20 homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,CDC20 cell division cycle 20 homolog,general,,"""CDC20 cell division cycle 20 homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,cell division cycle 20 homolog,general,,"""cell division cycle 20 homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",1
+19,CDC20,991,77.6666395203607,fizzy homolog,general,,"""fizzy homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+19,CDC20,991,77.6666395203607,CDC20,category,biomarker,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",20
+19,CDC20,991,77.6666395203607,CDC20,category,diagnostic,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",13
+19,CDC20,991,77.6666395203607,CDC20,category,roc_auc,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",5
+19,CDC20,991,77.6666395203607,CDC20,category,urine,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",17
+19,CDC20,991,77.6666395203607,CDC20,category,prognostic,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",22
+19,CDC20,991,77.6666395203607,CDC20,category,validation,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",7
+19,CDC20,991,77.6666395203607,CDC20,category,expression,"""CDC20""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",28
+20,AURKB,9212,77.4178464055861,AURKB,general,,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",20
+20,AURKB,9212,77.4178464055861,AIK2,general,,"""AIK2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,AIM-1,general,,"""AIM-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,AIM1,general,,"""AIM1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",2
+20,AURKB,9212,77.4178464055861,ARK-2,general,,"""ARK-2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,ARK2,general,,"""ARK2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,AurB,general,,"""AurB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,IPL1,general,,"""IPL1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,PPP1R48,general,,"""PPP1R48""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,STK-1,general,,"""STK-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,STK12,general,,"""STK12""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,STK5,general,,"""STK5""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurkb-sv1,general,,"""aurkb-sv1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurkb-sv2,general,,"""aurkb-sv2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora kinase B,general,,"""aurora kinase B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",8
+20,AURKB,9212,77.4178464055861,aurora kinase B-Sv1,general,,"""aurora kinase B-Sv1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora kinase B-Sv2,general,,"""aurora kinase B-Sv2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora- and Ipl1-like midbody-associated protein 1,general,,"""aurora- and Ipl1-like midbody-associated protein 1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora- and Ipl1-like midbody-associated protein 1 homolog,general,,"""aurora- and Ipl1-like midbody-associated protein 1 homolog""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora-1,general,,"""aurora-1""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora-B,general,,"""aurora-B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",6
+20,AURKB,9212,77.4178464055861,aurora-related kinase 2,general,,"""aurora-related kinase 2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,aurora/IPL1-related kinase 2,general,,"""aurora/IPL1-related kinase 2""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,"protein phosphatase 1, regulatory subunit 48",general,,"""protein phosphatase 1, regulatory subunit 48""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,serine/threonine kinase 12,general,,"""serine/threonine kinase 12""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,serine/threonine-protein kinase 12,general,,"""serine/threonine-protein kinase 12""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,serine/threonine-protein kinase 5,general,,"""serine/threonine-protein kinase 5""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,serine/threonine-protein kinase aurora-B,general,,"""serine/threonine-protein kinase aurora-B""[Title/Abstract] AND ""bladder cancer""[Title/Abstract]",0
+20,AURKB,9212,77.4178464055861,AURKB,category,biomarker,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""biomarker"" OR ""biomarkers"" OR ""biological marker"" OR ""tumor marker"")[Title/Abstract]",11
+20,AURKB,9212,77.4178464055861,AURKB,category,diagnostic,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""diagnostic"" OR ""diagnosis"" OR ""diagnostic marker"" OR ""diagnostic biomarker"")[Title/Abstract]",7
+20,AURKB,9212,77.4178464055861,AURKB,category,roc_auc,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""ROC"" OR ""AUC"" OR ""area under the curve"" OR ""receiver operating characteristic"")[Title/Abstract]",3
+20,AURKB,9212,77.4178464055861,AURKB,category,urine,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""urine"" OR ""urinary"" OR ""urine sample"")[Title/Abstract]",13
+20,AURKB,9212,77.4178464055861,AURKB,category,prognostic,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""prognostic"" OR ""prognosis"" OR ""survival"" OR ""overall survival"")[Title/Abstract]",12
+20,AURKB,9212,77.4178464055861,AURKB,category,validation,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""validation"" OR ""validated"" OR ""validation cohort"" OR ""independent cohort"")[Title/Abstract]",5
+20,AURKB,9212,77.4178464055861,AURKB,category,expression,"""AURKB""[Title/Abstract] AND ""bladder cancer""[Title/Abstract] AND (""expression"" OR ""differential expression"" OR ""gene expression"")[Title/Abstract]",18

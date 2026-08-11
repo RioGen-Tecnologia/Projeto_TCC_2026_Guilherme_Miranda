@@ -11,4 +11,6 @@ cache/
 GDCdata/
 *.tar.gz
 MANIFEST.txt
-
+.venv/
+__pycache__/
+*.pyc
