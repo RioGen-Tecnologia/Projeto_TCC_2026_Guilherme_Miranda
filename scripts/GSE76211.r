@@ -181,26 +181,34 @@ contrast.matrix <- makeContrasts(
   levels = matriz_modelo_GSE76211)
 fit2 <- eBayes(contrasts.fit(fit, contrast.matrix), trend = FALSE)
 
-## calculo de SMD
+## calculo de SMD (Corrigido para Metodologia Clássica)
 
 # contando o número de amostras usando a matriz de modelo
 n_tumor <- sum(matriz_modelo_GSE76211[, "tumor"])
 n_nontumor <- sum(matriz_modelo_GSE76211[, "non_tumor"])
 
-# Extraindo a estatística 't' do limma
-t_stat <- fit2$t[, "Tumor_vs_NonTumor"]
+# 1. Extraindo a diferença de médias (logFC)
+logFC <- fit2$coefficients[, "Tumor_vs_NonTumor"]
 
-# calculando o Hedges' g (SMD) e a variância usando escalc
+# 2. Reconstruindo o Erro Padrão Ordinário (sem Bayes empírico)
+# fit2$sigma é o desvio padrão residual clássico do modelo para cada gene
+# fit2$stdev.unscaled é o fator de escala baseado na matriz de design
+se_ordinary <- fit2$sigma * fit2$stdev.unscaled[, "Tumor_vs_NonTumor"]
+
+# 3. Calculando a estatística 't' ordinária (Student's t clássico)
+t_stat_ordinary <- logFC / se_ordinary
+
+# 4. Calculando o Hedges' g (SMD) e a variância rigorosamente
 es_results <- escalc(
   measure = "SMD", 
-  ti = t_stat, 
-  n1i = rep(n_tumor, length(t_stat)), 
-  n2i = rep(n_nontumor, length(t_stat))
+  ti = t_stat_ordinary, 
+  n1i = rep(n_tumor, length(t_stat_ordinary)), 
+  n2i = rep(n_nontumor, length(t_stat_ordinary))
 )
 
 # montando informações para meta-analise
 metafor_GSE76211 <- data.frame(
-  logFC = fit2$coefficients[, "Tumor_vs_NonTumor"],
+  logFC = logFC,
   SMD   = es_results$yi,
   SE    = sqrt(es_results$vi) # O Erro Padrão é a raiz da variância
 )
