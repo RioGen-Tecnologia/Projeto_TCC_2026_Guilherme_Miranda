@@ -219,9 +219,10 @@ es_results <- escalc(
 
 # montando informações para meta-analise
 metafor_GSE65635 <- data.frame(
-  logFC = logFC,
-  SMD   = es_results$yi,
-  SE    = sqrt(es_results$vi) # O Erro Padrão é a raiz da variância
+  logFC    = logFC,
+  SE_logFC = se_ordinary,
+  SMD      = es_results$yi,
+  SE_SMD   = sqrt(es_results$vi)
 )
 rownames(metafor_GSE65635) <- rownames(fit2$coefficients)
 

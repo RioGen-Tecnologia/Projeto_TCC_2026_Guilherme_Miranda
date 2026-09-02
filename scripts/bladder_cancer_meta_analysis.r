@@ -120,19 +120,21 @@ num_genes <- length(genes_filtrados)
 num_datasets <- length(arquivos_metafor)
 nomes_datasets <- names(arquivos_metafor)
 
-matriz_SMD   <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
-matriz_SE    <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
-matriz_logFC <- matrix(NA, nrow = num_genes, ncol = num_datasets, dimnames = list(genes_filtrados, nomes_datasets))
+matriz_SMD <- matrix(NA,nrow = num_genes,ncol = num_datasets,dimnames = list(genes_filtrados, nomes_datasets))
+matriz_SE_SMD <- matrix(NA,nrow = num_genes,ncol = num_datasets,dimnames = list(genes_filtrados, nomes_datasets))
+matriz_logFC <- matrix(NA,nrow = num_genes,ncol = num_datasets,dimnames = list(genes_filtrados, nomes_datasets))
+matriz_SE_logFC <- matrix(NA,nrow = num_genes,ncol = num_datasets,dimnames = list(genes_filtrados, nomes_datasets))
 
 # preenchendo as matrizes iterando sobre os datasets
 for (i in seq_along(arquivos_metafor)) {
   df <- arquivos_metafor[[i]]
-  # descobrir quais dos genes filtrados existem neste dataset específico
-  genes_em_comum <- intersect(genes_filtrados, rownames(df))
-  # injetar os valores nas posições corretas da matriz
-  matriz_SMD[genes_em_comum, i]   <- df[genes_em_comum, "SMD"]
-  matriz_SE[genes_em_comum, i]    <- df[genes_em_comum, "SE"]
+  genes_em_comum <- intersect(
+    genes_filtrados,
+    rownames(df))
+  matriz_SMD[genes_em_comum, i] <- df[genes_em_comum, "SMD"]
+  matriz_SE_SMD[genes_em_comum, i] <- df[genes_em_comum, "SE_SMD"]
   matriz_logFC[genes_em_comum, i] <- df[genes_em_comum, "logFC"]
+  matriz_SE_logFC[genes_em_comum, i] <- df[genes_em_comum, "SE_logFC"]
 }
 
 
@@ -150,37 +152,124 @@ message("REALIZANDO META-ANÁLISE...")
 message("===========================================================================")
 
 # rodar para todos os genes
-resultados_meta <- pblapply(1:length(genes_filtrados), function(i) {
-  
-  yi  <- matriz_SMD[i, ]
-  sei <- matriz_SE[i, ]
-  
-  estudos_validos <- sum(!is.na(yi) & !is.na(sei))
-  
-  if (estudos_validos < 3) {
-    return(c(SMD_pool = NA, SE_pool = NA, pval = NA, I2 = NA, tau2 = NA, num_estudos = estudos_validos))
+resultados_meta <- pblapply(
+  seq_along(genes_filtrados),
+  function(i) {
+    
+    # =========================================================
+    # HEDGES' G — META-ANÁLISE PRINCIPAL
+    # =========================================================
+    
+    yi_smd  <- matriz_SMD[i, ]
+    sei_smd <- matriz_SE_SMD[i, ]
+    
+    validos_smd <- !is.na(yi_smd) & !is.na(sei_smd)
+    
+    estudos_validos <- sum(validos_smd)
+    
+    if (estudos_validos < 3) {
+      
+      return(c(
+        HedgesG_pool   = NA,
+        SE_HedgesG     = NA,
+        pval           = NA,
+        I2             = NA,
+        tau2           = NA,
+        num_estudos    = estudos_validos,
+        logFC_meta     = NA,
+        SE_logFC_meta  = NA
+      ))
+    }
+    
+    fit_smd <- tryCatch({
+      
+      rma.uni(
+        yi = yi_smd[validos_smd],
+        sei = sei_smd[validos_smd],
+        method = "REML"
+      )
+      
+    }, error = function(e) {
+      NULL
+    })
+    
+    
+    # =========================================================
+    # LOGFC — META-ANÁLISE COMPLEMENTAR
+    # =========================================================
+    
+    yi_logFC  <- matriz_logFC[i, ]
+    sei_logFC <- matriz_SE_logFC[i, ]
+    
+    validos_logFC <- !is.na(yi_logFC) & !is.na(sei_logFC)
+    
+    estudos_validos_logFC <- sum(validos_logFC)
+    
+    if (estudos_validos_logFC >= 3) {
+      
+      fit_logFC <- tryCatch({
+        
+        rma.uni(
+          yi = yi_logFC[validos_logFC],
+          sei = sei_logFC[validos_logFC],
+          method = "REML"
+        )
+        
+      }, error = function(e) {
+        NULL
+      })
+      
+    } else {
+      
+      fit_logFC <- NULL
+      
+    }
+    
+    
+    # =========================================================
+    # RESULTADOS
+    # =========================================================
+    
+    c(
+      HedgesG_pool = if (!is.null(fit_smd))
+        as.numeric(fit_smd$beta)
+      else
+        NA,
+      
+      SE_HedgesG = if (!is.null(fit_smd))
+        fit_smd$se
+      else
+        NA,
+      
+      pval = if (!is.null(fit_smd))
+        fit_smd$pval
+      else
+        NA,
+      
+      I2 = if (!is.null(fit_smd))
+        fit_smd$I2
+      else
+        NA,
+      
+      tau2 = if (!is.null(fit_smd))
+        fit_smd$tau2
+      else
+        NA,
+      
+      num_estudos = estudos_validos,
+      
+      logFC_meta = if (!is.null(fit_logFC))
+        as.numeric(fit_logFC$beta)
+      else
+        NA,
+      
+      SE_logFC_meta = if (!is.null(fit_logFC))
+        fit_logFC$se
+      else
+        NA
+    )
   }
-  
-  # Usando REML (padrão mais moderno que conversamos)
-  fit <- tryCatch({
-    rma.uni(yi = yi, sei = sei, method = "REML")
-  }, error = function(e) {
-    return(NULL)
-  })
-  
-  if (is.null(fit)) {
-    return(c(SMD_pool = NA, SE_pool = NA, pval = NA, I2 = NA, tau2 = NA, num_estudos = estudos_validos))
-  }
-  
-  c(
-    SMD_pool    = as.numeric(fit$beta),
-    SE_pool     = fit$se,
-    pval        = fit$pval,
-    I2          = fit$I2,
-    tau2        = fit$tau2,
-    num_estudos = estudos_validos
-  )
-})
+)
 
 message("===========================================================================")
 message("META-ANÁLISE FINALIZADA")
@@ -189,9 +278,6 @@ message("=======================================================================
 ## transformando em uma tabela final
 df_meta_final <- as.data.frame(do.call(rbind, resultados_meta))
 df_meta_final$Gene <- genes_filtrados
-
-# calculando a média do logFC ignorando os NAs
-df_meta_final$logFC_mean <- rowMeans(matriz_logFC, na.rm = TRUE)
 
 # Remover eventuais genes que falharam no modelo (NAs) antes de corrigir o P-valor
 df_meta_final <- df_meta_final[!is.na(df_meta_final$pval), ]
@@ -212,15 +298,31 @@ simbolos_mapeados <- mapIds(
 df_meta_final$Symbol <- simbolos_mapeados[as.character(df_meta_final$Gene)]
 
 # Reordenar colunas
-df_meta_final <- df_meta_final[, c("Gene", "Symbol", "num_estudos", "logFC_mean", "SMD_pool", "SE_pool", "pval", "FDR", "I2", "tau2")]
-df_meta_final <- df_meta_final %>% rename(HedgesG_pool = SMD_pool) #renomeando a coluna SMD para G de Hedges
-df_meta_final <- df_meta_final[order(df_meta_final$pval), ]
+df_meta_final <- df_meta_final[, c(
+  "Gene",
+  "Symbol",
+  "num_estudos",
+  "HedgesG_pool",
+  "SE_HedgesG",
+  "pval",
+  "FDR",
+  "I2",
+  "tau2",
+  "logFC_meta",
+  "SE_logFC_meta"
+)]
+
+df_meta_final <- df_meta_final[
+  order(df_meta_final$pval),
+]
 
 print(head(df_meta_final))
 
 # limpando
-rm(matriz_SMD, matriz_SE, matriz_logFC, resultados_meta, todos_genes, contagem_genes, 
-  genes_filtrados, i,estudos_validos,simbolos_mapeados)
+rm(matriz_SMD,matriz_SE_SMD,matriz_logFC,matriz_SE_logFC,resultados_meta,
+  todos_genes,contagem_genes,genes_filtrados,simbolos_mapeados
+)
+
 gc()
 
 # ============== TRATAMENTO DE DADOS E ESTIMAÇÃO DE DEGS ==============
